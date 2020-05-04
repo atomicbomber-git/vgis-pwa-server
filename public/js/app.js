@@ -2355,26 +2355,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     initPanorama: function initPanorama(panorama) {
       var _this3 = this;
 
-      var gmap_panorama = new google.maps.StreetViewPanorama(this.$refs.streetview_ref, {
-        pano: "".concat(panorama.id)
-      });
-      /* Register panorama provider */
+      if (!this.gmap_panorama) {
+        this.gmap_panorama = new google.maps.StreetViewPanorama(this.$refs.streetview_ref, {
+          pano: "".concat(panorama.id)
+        });
+        /* Register panorama provider */
 
-      gmap_panorama.registerPanoProvider(function (search_pano_id) {
-        if (_this3.panoramas.find(function (panorama) {
-          return panorama.id == search_pano_id;
-        })) {
-          return _this3.getPanoramaData(panorama);
-        }
+        this.gmap_panorama.registerPanoProvider(function (search_pano_id) {
+          if (_this3.panoramas.find(function (panorama) {
+            return panorama.id == search_pano_id;
+          })) {
+            return _this3.getPanoramaData(panorama);
+          }
 
-        return null;
-      });
-      this.map.setStreetView(gmap_panorama);
+          return null;
+        });
+        this.map.setStreetView(this.gmap_panorama);
+        this.gmap_panorama.addListener('pano_changed', function () {
+          console.log(_this3.gmap_panorama.pano);
+        });
+        return;
+      }
+
+      this.gmap_panorama.setPano("".concat(panorama.id));
+      console;
     },
     getPanoramaData: function getPanoramaData(panorama) {
       return {
         location: {
-          pano: panorama.id,
+          pano: "".concat(panorama.id),
           // The ID for this custom panorama.
           description: panorama.nama,
           latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
@@ -2382,15 +2391,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         links: panorama.panorama_links.map(function (link) {
           return {
             heading: link.heading,
-            description: link.end.nama,
-            pano: link.end.id
+            description: '',
+            pano: link.panorama_end_id
           };
         }),
         copyright: 'Imagery (c) 2010 Rizki Oktaviano',
         tiles: {
           tileSize: new google.maps.Size(1024, 512),
           worldSize: new google.maps.Size(1024, 512),
-          centerHeading: 105,
+          heading: 0,
           getTileUrl: function getTileUrl(pano, zoom, tileX, tileY) {
             return "/panorama-image/".concat(panorama.id, "/").concat(zoom, "/").concat(tileX, "/").concat(tileY);
           }

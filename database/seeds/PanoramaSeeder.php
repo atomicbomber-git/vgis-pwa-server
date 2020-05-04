@@ -15,7 +15,7 @@ class PanoramaSeeder extends Seeder
     {
         DB::beginTransaction();
 
-        factory(Panorama::class, 20)
+        factory(Panorama::class, 5)
             ->create()
             ->each(function (Panorama $panorama) {
                 $panorama

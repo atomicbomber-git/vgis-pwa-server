@@ -17,7 +17,7 @@ class PanoramaLinkSeeder extends Seeder
 
         foreach ($panoramas as $panorama_start) {
             foreach ($panoramas as $panorama_end) {
-                if ($panorama_start->id <= $panorama_end->id) {
+                if ($panorama_start->id === $panorama_end->id) {
                     continue;
                 }
 

@@ -111,6 +111,7 @@
                 if (new_selected_panorama === null) {
                     return
                 }
+
                 this.initPanorama(new_selected_panorama)
             }
         },
@@ -153,27 +154,39 @@
             },
 
             initPanorama(panorama) {
-                let gmap_panorama = new google.maps.StreetViewPanorama(
-                    this.$refs.streetview_ref,
-                    {pano: `${panorama.id}`}
-                );
+                if (!this.gmap_panorama) {
+                    this.gmap_panorama = new google.maps.StreetViewPanorama(
+                        this.$refs.streetview_ref,
+                        {pano: `${panorama.id}`}
+                    );
 
-                /* Register panorama provider */
-                gmap_panorama.registerPanoProvider(search_pano_id => {
-                    if (this.panoramas.find(panorama => panorama.id == search_pano_id)) {
-                        return this.getPanoramaData(panorama);
-                    }
+                    /* Register panorama provider */
+                    this.gmap_panorama.registerPanoProvider(search_pano_id => {
+                        if (this.panoramas.find(panorama => panorama.id == search_pano_id)) {
+                            return this.getPanoramaData(panorama);
+                        }
 
-                    return null;
-                });
 
-                this.map.setStreetView(gmap_panorama);
+                        return null;
+                    });
+
+                    this.map.setStreetView(this.gmap_panorama);
+
+                    this.gmap_panorama.addListener('pano_changed', () => {
+                        console.log(this.gmap_panorama.pano)
+                    });
+
+                    return
+                }
+
+                this.gmap_panorama.setPano(`${panorama.id}`)
+                console
             },
 
             getPanoramaData(panorama) {
                 return {
                     location: {
-                        pano: panorama.id,  // The ID for this custom panorama.
+                        pano: `${panorama.id}`,  // The ID for this custom panorama.
                         description: panorama.nama,
                         latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
                     },
@@ -181,8 +194,8 @@
                     links: panorama.panorama_links.map(link => {
                         return {
                             heading: link.heading,
-                            description: link.end.nama,
-                            pano: link.end.id,
+                            description: '',
+                            pano: link.panorama_end_id,
                         }
                     }),
 
@@ -190,7 +203,7 @@
                     tiles: {
                         tileSize: new google.maps.Size(1024, 512),
                         worldSize: new google.maps.Size(1024, 512),
-                        centerHeading: 105,
+                        heading: 0,
                         getTileUrl: (pano, zoom, tileX, tileY) => {
                             return `/panorama-image/${panorama.id}/${zoom}/${tileX}/${tileY}`;
                         }
