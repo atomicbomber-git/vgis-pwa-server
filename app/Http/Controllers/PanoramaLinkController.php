@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Panorama;
 use App\PanoramaLink;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class PanoramaLinkController extends Controller
      */
     public function index()
     {
-        //
+        $panoramas = Panorama::query()->get();
     }
 
     /**

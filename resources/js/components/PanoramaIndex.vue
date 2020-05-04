@@ -18,13 +18,21 @@
                             :position="{lat: pointer_marker.latitude, lng: pointer_marker.longitude}"
                         />
 
-                        <!-- Marker penanda lokasi panorama -->
-                        <gmap-marker
-                            v-for="panorama in panoramas"
-                            :key="panorama.id"
-                            @click="onPanoramaMarkerClick(panorama)"
-                            :position="{lat: panorama.latitude, lng: panorama.longitude}"
-                        />
+                        <template v-for="panorama in panoramas">
+                            <!-- Marker penanda lokasi panorama -->
+                            <gmap-marker
+                                :key="panorama.id + '_marker'"
+                                @click="onPanoramaMarkerClick(panorama)"
+                                :position="{lat: panorama.latitude, lng: panorama.longitude}"
+                            />
+
+                            <!-- Poligon panorama -->
+                            <GmapPolyline
+                                v-for="link in panorama.panorama_links"
+                                :key="link.id"
+                                :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"
+                            />
+                        </template>
                     </gmap-map>
 
                     <div class="card"
@@ -93,7 +101,6 @@
         },
 
         mounted() {
-
             this.$refs.map_ref.$mapPromise.then(map => {
                 this.map = map;
             })
@@ -171,6 +178,14 @@
                         latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
                     },
 
+                    links: panorama.panorama_links.map(link => {
+                        return {
+                            heading: link.heading,
+                            description: link.end.nama,
+                            pano: link.end.id,
+                        }
+                    }),
+
                     copyright: 'Imagery (c) 2010 Rizki Oktaviano',
                     tiles: {
                         tileSize: new google.maps.Size(1024, 512),
@@ -182,6 +197,17 @@
                     }
                 };
             },
+        },
+
+        computed: {
+            panorama_links() {
+                return this.panoramas.reduce((current, next) => {
+                    return [
+                        ...current,
+                        ...next.panorama_links
+                    ]
+                }, [])
+            }
         }
     }
 </script>

@@ -26,6 +26,7 @@ class PanoramaController extends Controller
     public function index()
     {
         $panoramas = Panorama::query()
+            ->with("panorama_links.end")
             ->get();
 
         return response()->view("panorama.index", compact(

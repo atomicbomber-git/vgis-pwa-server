@@ -2192,6 +2192,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modal */ "./resources/js/modal.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2359,6 +2379,13 @@ __webpack_require__.r(__webpack_exports__);
           description: panorama.nama,
           latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
         },
+        links: panorama.panorama_links.map(function (link) {
+          return {
+            heading: link.heading,
+            description: link.end.nama,
+            pano: link.end.id
+          };
+        }),
         copyright: 'Imagery (c) 2010 Rizki Oktaviano',
         tiles: {
           tileSize: new google.maps.Size(1024, 512),
@@ -2369,6 +2396,13 @@ __webpack_require__.r(__webpack_exports__);
           }
         }
       };
+    }
+  },
+  computed: {
+    panorama_links: function panorama_links() {
+      return this.panoramas.reduce(function (current, next) {
+        return [].concat(_toConsumableArray(current), _toConsumableArray(next.panorama_links));
+      }, []);
     }
   }
 });
@@ -42616,20 +42650,34 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _vm._l(_vm.panoramas, function(panorama) {
-                  return _c("gmap-marker", {
-                    key: panorama.id,
-                    attrs: {
-                      position: {
-                        lat: panorama.latitude,
-                        lng: panorama.longitude
+                  return [
+                    _c("gmap-marker", {
+                      key: panorama.id + "_marker",
+                      attrs: {
+                        position: {
+                          lat: panorama.latitude,
+                          lng: panorama.longitude
+                        }
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.onPanoramaMarkerClick(panorama)
+                        }
                       }
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.onPanoramaMarkerClick(panorama)
-                      }
-                    }
-                  })
+                    }),
+                    _vm._v(" "),
+                    _vm._l(panorama.panorama_links, function(link) {
+                      return _c("GmapPolyline", {
+                        key: link.id,
+                        attrs: {
+                          path: [
+                            { lat: panorama.latitude, lng: panorama.longitude },
+                            { lat: link.end.latitude, lng: link.end.longitude }
+                          ]
+                        }
+                      })
+                    })
+                  ]
                 })
               ],
               2

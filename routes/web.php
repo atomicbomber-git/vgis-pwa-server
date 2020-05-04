@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\PanoramaController;
 use App\Http\Controllers\PanoramaImageController;
+use App\Http\Controllers\PanoramaLinkController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,4 +25,6 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/panorama', class_basename(PanoramaController::class));
+Route::resource('/panorama-link', class_basename(PanoramaLinkController::class));
+
 Route::get('/panorama-image/{panorama}/{zoom}/{tile_x}/{tile_y}', class_basename(PanoramaImageController::class))->name('panorama-image');

@@ -87,6 +87,12 @@
                                         Panorama
                                     </a>
                                 </div>
+
+                                <div class="nav-item">
+                                    <a class="px-0" href="{{ route("panorama.index") }}">
+                                        Panorama
+                                    </a>
+                                </div>
                             </div>
 
                             <div class="my-3">
