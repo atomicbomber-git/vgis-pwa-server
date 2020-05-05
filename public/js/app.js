@@ -2330,12 +2330,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2349,10 +2343,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       in_connecting_mode: false,
       selected_panorama: null,
       selected_panorama_link_position: null,
-      pointer_marker: {
-        latitude: this.map_config.latitude,
-        longitude: this.map_config.longitude
-      }
+      selected_panorama_link: null
     };
   },
   mounted: function mounted() {
@@ -2372,9 +2363,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
-    onPanoramaLinkLineClick: function onPanoramaLinkLineClick(e) {
-      this.pointer_marker.latitude = e.latLng.lat();
-      this.pointer_marker.longitude = e.latLng.lng();
+    onPanoramaLinkLineClick: function onPanoramaLinkLineClick(e, link) {
+      this.selected_panorama_link_position = {
+        latitude: e.latLng.lat(),
+        longitude: e.latLng.lng()
+      };
+      this.selected_panorama_link = link;
     },
     onConnectButtonClick: function onConnectButtonClick() {
       this.in_connecting_mode = !this.in_connecting_mode;
@@ -2421,10 +2415,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this2.in_connecting_mode = false;
         _modal__WEBPACK_IMPORTED_MODULE_0__["default"].errorModal();
       });
-    },
-    onMapClick: function onMapClick(e) {
-      this.pointer_marker.latitude = e.latLng.lat();
-      this.pointer_marker.longitude = e.latLng.lng();
     },
     resetState: function resetState() {
       this.in_connecting_mode = false;
@@ -42731,84 +42721,104 @@ var render = function() {
       _c("div", { staticClass: "card" }, [
         _c(
           "div",
-          { staticClass: "card-body p-0" },
+          {
+            staticClass: "card-body p-0 d-flex flex-column",
+            staticStyle: { height: "600px" }
+          },
           [
             _c(
-              "gmap-map",
-              {
-                ref: "map_ref",
-                style: {
-                  height: "600px"
-                },
-                attrs: {
-                  center: {
-                    lat: _vm.map_config.center.latitude,
-                    lng: _vm.map_config.center.longitude
-                  },
-                  zoom: _vm.map_config.zoom,
-                  "map-type-id": "terrain"
-                },
-                on: { click: _vm.onMapClick }
-              },
+              "div",
+              { staticClass: "flex-grow-1" },
               [
-                _c("gmap-marker", {
-                  attrs: {
-                    position: {
-                      lat: _vm.pointer_marker.latitude,
-                      lng: _vm.pointer_marker.longitude
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _vm.selected_panorama_link_position
-                  ? _c("gmap-info-window", {
-                      attrs: {
-                        position: {
-                          lat: _vm.selected_panorama_link_position.latitude,
-                          lng: _vm.selected_panorama_link_position.longitude
-                        }
-                      }
-                    })
-                  : _vm._e(),
-                _vm._v(" "),
-                _vm._l(_vm.panoramas, function(panorama) {
-                  return [
-                    _c("gmap-marker", {
-                      key: panorama.id + "_marker",
-                      attrs: {
-                        position: {
-                          lat: panorama.latitude,
-                          lng: panorama.longitude
-                        }
+                _c(
+                  "gmap-map",
+                  {
+                    ref: "map_ref",
+                    style: { height: "100%" },
+                    attrs: {
+                      center: {
+                        lat: _vm.map_config.center.latitude,
+                        lng: _vm.map_config.center.longitude
                       },
-                      on: {
-                        click: function($event) {
-                          return _vm.onPanoramaMarkerClick(panorama)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm._l(panorama.panorama_links, function(link) {
-                      return _c("gmap-polyline", {
-                        key: link.id,
-                        attrs: {
-                          options: {
-                            strokeColor: "#FF0000",
-                            strokeOpacity: 0.5,
-                            strokeWeight: 4
+                      zoom: _vm.map_config.zoom,
+                      "map-type-id": "terrain"
+                    }
+                  },
+                  [
+                    _vm.selected_panorama_link_position
+                      ? _c(
+                          "gmap-info-window",
+                          {
+                            attrs: {
+                              position: {
+                                lat:
+                                  _vm.selected_panorama_link_position.latitude,
+                                lng:
+                                  _vm.selected_panorama_link_position.longitude
+                              }
+                            }
                           },
-                          path: [
-                            { lat: panorama.latitude, lng: panorama.longitude },
-                            { lat: link.end.latitude, lng: link.end.longitude }
+                          [
+                            _c("h2", [
+                              _vm._v(
+                                "\n                                TEST TEST\n                            "
+                              )
+                            ])
                           ]
-                        },
-                        on: { click: _vm.onPanoramaLinkLineClick }
-                      })
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm._l(_vm.panoramas, function(panorama) {
+                      return [
+                        _c("gmap-marker", {
+                          key: panorama.id + "_marker",
+                          attrs: {
+                            position: {
+                              lat: panorama.latitude,
+                              lng: panorama.longitude
+                            }
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.onPanoramaMarkerClick(panorama)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._l(panorama.panorama_links, function(link) {
+                          return _c("gmap-polyline", {
+                            key: link.id,
+                            attrs: {
+                              options: {
+                                strokeColor: "#FF0000",
+                                strokeOpacity: 0.5,
+                                strokeWeight: 4
+                              },
+                              path: [
+                                {
+                                  lat: panorama.latitude,
+                                  lng: panorama.longitude
+                                },
+                                {
+                                  lat: link.end.latitude,
+                                  lng: link.end.longitude
+                                }
+                              ]
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.onPanoramaLinkLineClick($event, link)
+                              }
+                            }
+                          })
+                        })
+                      ]
                     })
-                  ]
-                })
+                  ],
+                  2
+                )
               ],
-              2
+              1
             ),
             _vm._v(" "),
             _vm.selected_panorama
@@ -42818,7 +42828,7 @@ var render = function() {
                       ? _c("div", { staticClass: "alert alert-warning" }, [
                           _c("i", { staticClass: "fas fa-info-circle  " }),
                           _vm._v(
-                            "\n                                Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama\n                                lain untuk membuat hubungan baru.\n                            "
+                            "\n                            Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama\n                            lain untuk membuat hubungan baru.\n                        "
                           )
                         ])
                       : _vm._e(),
@@ -42826,17 +42836,17 @@ var render = function() {
                     _c("h2", { staticClass: "h4" }, [
                       _c("i", { staticClass: "fas fa-map-marker" }),
                       _vm._v(
-                        "\n                                " +
+                        "\n                            " +
                           _vm._s(_vm.selected_panorama.nama) +
-                          "\n                            "
+                          "\n                        "
                       )
                     ]),
                     _vm._v(" "),
                     _c("p", [
                       _vm._v(
-                        "\n                                " +
+                        "\n                            " +
                           _vm._s(_vm.selected_panorama.deskripsi) +
-                          "\n                            "
+                          "\n                        "
                       )
                     ]),
                     _vm._v(" "),
@@ -42856,7 +42866,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                                        Tutup VT\n                                        "
+                                  "\n                                    Close Tour\n                                    "
                                 ),
                                 _c("i", {
                                   staticClass: "fas fa-arrow-circle-left  "
@@ -42882,13 +42892,13 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                                        " +
+                                  "\n                                    " +
                                     _vm._s(
                                       !this.in_connecting_mode
-                                        ? "Hubungkan"
-                                        : "Batal Hubungkan"
+                                        ? "Connect"
+                                        : "Connect (Cancel)"
                                     ) +
-                                    "\n                                        "
+                                    "\n                                    "
                                 ),
                                 _c("i", { staticClass: "fas fa-link" })
                               ]
@@ -42915,8 +42925,7 @@ var render = function() {
                   ])
                 ])
               : _vm._e()
-          ],
-          1
+          ]
         )
       ])
     ]),
@@ -42945,7 +42954,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("button", { staticClass: "btn btn-danger btn-sm" }, [
       _vm._v(
-        "\n                                            Hapus\n                                            "
+        "\n                                        Delete\n                                        "
       ),
       _c("i", { staticClass: "fas fa-trash-alt " })
     ])

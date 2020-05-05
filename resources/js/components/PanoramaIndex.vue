@@ -2,64 +2,58 @@
     <div class="row no-gutters">
         <div class="col-md">
             <div class="card">
-                <div class="card-body p-0">
-                    <gmap-map
-                        @click="onMapClick"
-                        ref="map_ref"
-                        :center="{lat: map_config.center.latitude, lng: map_config.center.longitude}"
-                        :zoom="map_config.zoom"
-                        :style="{
-                            height: '600px'
-                        }"
-                        map-type-id="terrain"
-                    >
-                        <!-- Marker pointer -->
-                        <gmap-marker
-                            :position="{lat: pointer_marker.latitude, lng: pointer_marker.longitude}"
-                        />
+                <div class="card-body p-0 d-flex flex-column"
+                     style="height: 600px">
+                    <div class="flex-grow-1">
+                        <gmap-map
+                            ref="map_ref"
+                            :center="{lat: map_config.center.latitude, lng: map_config.center.longitude}"
+                            :zoom="map_config.zoom"
+                            :style="{ height: '100%' }"
+                            map-type-id="terrain"
+                        >
 
-                        <gmap-info-window
-                            v-if="selected_panorama_link_position"
-                            :position="{
+                            <gmap-info-window
+                                v-if="selected_panorama_link_position"
+                                :position="{
                                 lat: selected_panorama_link_position.latitude,
                                 lng: selected_panorama_link_position.longitude
                             }"
-                        ></gmap-info-window>
+                            >
+                                <h2>
+                                    TEST TEST
+                                </h2>
 
-                        <template v-for="panorama in panoramas">
-                            <!-- Marker penanda lokasi panorama -->
-                            <gmap-marker
-                                :key="panorama.id + '_marker'"
-                                @click="onPanoramaMarkerClick(panorama)"
-                                :position="{lat: panorama.latitude, lng: panorama.longitude}"
-                            />
+                            </gmap-info-window>
 
-                            <!-- Poligon panorama -->
-                            <gmap-polyline
-                                @click="onPanoramaLinkLineClick"
-                                :options="{
+                            <template v-for="panorama in panoramas">
+                                <!-- Marker penanda lokasi panorama -->
+                                <gmap-marker
+                                    :key="panorama.id + '_marker'"
+                                    @click="onPanoramaMarkerClick(panorama)"
+                                    :position="{lat: panorama.latitude, lng: panorama.longitude}"
+                                />
+
+                                <!-- Poligon panorama -->
+                                <gmap-polyline
+                                    :options="{
                                     strokeColor: '#FF0000',
                                     strokeOpacity: 0.5,
                                     strokeWeight: 4
                                 }"
-                                v-for="link in panorama.panorama_links"
-                                :key="link.id"
-                                :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"
-                            />
+                                    v-for="link in panorama.panorama_links"
+                                    @click="onPanoramaLinkLineClick($event, link)"
+                                    :key="link.id"
+                                    :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"
+                                />
+                            </template>
+                        </gmap-map>
+                    </div>
 
-                            <!-- Poligon konektor baru -->
-<!--                            <GmapPolyline-->
-<!--                                v-for="link in panorama.panorama_links"-->
-<!--                                :key="link.id"-->
-<!--                                :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"-->
-<!--                            />-->
-                        </template>
-                    </gmap-map>
 
                     <div class="card"
                          v-if="selected_panorama">
                         <div class="card-body">
-
                             <div
                                 v-if="in_connecting_mode"
                                 class="alert alert-warning">
@@ -81,7 +75,7 @@
                                     <button
                                         @click="onCloseVirtualTourButtonClick"
                                         class="btn btn-secondary btn-sm">
-                                        Tutup VT
+                                        Close Tour
                                         <i class="fas fa-arrow-circle-left  "></i>
                                     </button>
                                 </div>
@@ -96,14 +90,14 @@
                                             'btn-warning': this.in_connecting_mode,
                                         }"
                                     >
-                                        {{ !this.in_connecting_mode ? 'Hubungkan' : 'Batal Hubungkan' }}
+                                        {{ !this.in_connecting_mode ? 'Connect' : 'Connect (Cancel)' }}
                                         <i class="fas fa-link"></i>
                                     </button>
 
 
                                     <form @submit.prevent="onPanoramaDeleteButtonClick">
                                         <button class="btn btn-danger btn-sm">
-                                            Hapus
+                                            Delete
                                             <i class="fas fa-trash-alt "></i>
                                         </button>
                                     </form>
@@ -140,10 +134,7 @@
                 in_connecting_mode: false,
                 selected_panorama: null,
                 selected_panorama_link_position: null,
-                pointer_marker: {
-                    latitude: this.map_config.latitude,
-                    longitude: this.map_config.longitude,
-                },
+                selected_panorama_link: null,
             }
         },
 
@@ -164,9 +155,13 @@
         },
 
         methods: {
-            onPanoramaLinkLineClick(e) {
-                this.pointer_marker.latitude = e.latLng.lat()
-                this.pointer_marker.longitude = e.latLng.lng()
+            onPanoramaLinkLineClick(e, link) {
+                this.selected_panorama_link_position = {
+                    latitude: e.latLng.lat(),
+                    longitude: e.latLng.lng(),
+                }
+
+                this.selected_panorama_link = link
             },
 
             onConnectButtonClick() {
@@ -191,7 +186,9 @@
 
                 modal.confirmationModal()
                     .then(response => {
-                        if (!response.value) { throw new Error() }
+                        if (!response.value) {
+                            throw new Error()
+                        }
                         return axios.post(`/panorama-link`, {
                             panorama_start_id: this.selected_panorama.id,
                             panorama_end_id: panorama.id,
@@ -212,11 +209,6 @@
                         this.in_connecting_mode = false
                         modal.errorModal()
                     })
-            },
-
-            onMapClick(e) {
-                this.pointer_marker.latitude = e.latLng.lat()
-                this.pointer_marker.longitude = e.latLng.lng()
             },
 
             resetState() {
