@@ -19,8 +19,8 @@ class CreatePanoramaLinkTable extends Migration
             $table->unsignedInteger('panorama_end_id')->index();
             $table->double('heading')->comment('Besar sudut');
 
-            $table->foreign('panorama_start_id')->references('id')->on('panorama');
-            $table->foreign('panorama_end_id')->references('id')->on('panorama');
+            $table->foreign('panorama_start_id')->references('id')->on('panorama')->cascadeOnDelete();
+            $table->foreign('panorama_end_id')->references('id')->on('panorama')->cascadeOnDelete();
             $table->timestamps();
         });
     }

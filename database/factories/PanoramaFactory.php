@@ -2,7 +2,6 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Panorama;
 use Faker\Generator as Faker;
 
 $factory->define(App\Panorama::class, function (Faker $faker) {

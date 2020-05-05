@@ -30,12 +30,11 @@ class Panorama extends Model implements HasMedia
     {
         $d_longitude = $panorama_end->longitude - $this->longitude;
         $y = sin($d_longitude) * cos($panorama_end->latitude);
-        $x = cos($this->latitude) *
-            sin($panorama_end->latitude) - sin($this->latitude) *
-            cos($panorama_end->latitude)*cos($d_longitude);
+        $x = (cos($this->latitude) * sin($panorama_end->latitude)) -
+            (sin($this->latitude) * cos($panorama_end->latitude) * cos($d_longitude));
 
         $heading = rad2deg(atan2($y, $x));
-        return (360 - (($heading + 360) % 360));
+        return ($heading + 360) % 360;
     }
 
     public function registerMediaConversions(Media $media = null): void

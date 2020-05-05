@@ -5,19 +5,11 @@ namespace App\Http\Controllers;
 use App\Panorama;
 use App\PanoramaLink;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class PanoramaLinkController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $panoramas = Panorama::query()->get();
-    }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +17,7 @@ class PanoramaLinkController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -36,7 +28,39 @@ class PanoramaLinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            "panorama_start_id" => ["required", "exists:panorama,id"],
+            "panorama_end_id" => ["required", "exists:panorama,id"],
+        ]);
+
+        /** @var Panorama $panorama_start */
+        $panorama_start = Panorama::query()->find($data["panorama_start_id"]);
+
+        /** @var Panorama $panorama_end */
+        $panorama_end = Panorama::query()->find($data["panorama_end_id"]);
+
+        DB::beginTransaction();
+
+        $start_link = PanoramaLink::query()->updateOrCreate([
+            "panorama_start_id" => $data["panorama_start_id"],
+            "panorama_end_id" => $data["panorama_end_id"],
+        ], [
+            "heading" => $panorama_start->calculateHeadingWith($panorama_end)
+        ]);
+
+        $end_link = PanoramaLink::query()->updateOrCreate([
+            "panorama_start_id" => $data["panorama_end_id"],
+            "panorama_end_id" => $data["panorama_start_id"],
+        ], [
+            "heading" => $panorama_end->calculateHeadingWith($panorama_start)
+        ]);
+
+        DB::commit();
+
+        return new Response([
+            "start_link" => $start_link->load("end"),
+            "end_link" => $end_link->load("end"),
+        ]);
     }
 
     /**

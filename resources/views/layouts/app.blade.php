@@ -89,8 +89,8 @@
                                 </div>
 
                                 <div class="nav-item">
-                                    <a class="px-0" href="{{ route("panorama.index") }}">
-                                        Panorama
+                                    <a class="px-0" href="{{ route("panorama-link.index") }}">
+                                        Link Panorama
                                     </a>
                                 </div>
                             </div>

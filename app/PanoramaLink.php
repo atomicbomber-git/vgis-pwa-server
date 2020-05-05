@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class PanoramaLink extends Model
 {
     protected $table = "panorama_link";
+    protected $guarded = [];
 
     public function end(): BelongsTo
     {

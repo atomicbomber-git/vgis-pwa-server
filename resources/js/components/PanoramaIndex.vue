@@ -32,12 +32,28 @@
                                 :key="link.id"
                                 :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"
                             />
+
+                            <!-- Poligon konektor baru -->
+<!--                            <GmapPolyline-->
+<!--                                v-for="link in panorama.panorama_links"-->
+<!--                                :key="link.id"-->
+<!--                                :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"-->
+<!--                            />-->
                         </template>
                     </gmap-map>
 
                     <div class="card"
                          v-if="selected_panorama">
                         <div class="card-body">
+
+                            <div
+                                v-if="in_connecting_mode"
+                                class="alert alert-warning">
+                                <i class="fas fa-info-circle  "></i>
+                                Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama
+                                lain untuk membuat hubungan baru.
+                            </div>
+
                             <h2 class="h4">
                                 <i class="fas fa-map-marker"></i>
                                 {{ selected_panorama.nama }}
@@ -51,12 +67,26 @@
                                     <button
                                         @click="onCloseVirtualTourButtonClick"
                                         class="btn btn-secondary btn-sm">
-                                        Tutup Virtual Tour
+                                        Tutup VT
                                         <i class="fas fa-arrow-circle-left  "></i>
                                     </button>
                                 </div>
 
                                 <div class="d-flex justify-content-end">
+
+                                    <button
+                                        @click="onConnectButtonClick"
+                                        class="btn btn-sm mr-2"
+                                        :class="{
+                                            'btn-primary': !this.in_connecting_mode,
+                                            'btn-warning': this.in_connecting_mode,
+                                        }"
+                                    >
+                                        {{ !this.in_connecting_mode ? 'Hubungkan' : 'Batal Hubungkan' }}
+                                        <i class="fas fa-link"></i>
+                                    </button>
+
+
                                     <form @submit.prevent="onPanoramaDeleteButtonClick">
                                         <button class="btn btn-danger btn-sm">
                                             Hapus
@@ -92,6 +122,8 @@
 
         data() {
             return {
+                m_panoramas: [...this.panoramas],
+                in_connecting_mode: false,
                 selected_panorama: null,
                 pointer_marker: {
                     latitude: this.map_config.latitude,
@@ -117,13 +149,63 @@
         },
 
         methods: {
+            onConnectButtonClick() {
+                this.in_connecting_mode = !this.in_connecting_mode
+            },
+
+            onPanoramaMarkerClick(panorama) {
+                if (!this.in_connecting_mode) {
+                    this.selected_panorama = panorama
+                    return
+                }
+
+                /* Need to check if there's a link already here */
+                let existing_link_count = this.selected_panorama.panorama_links
+                    .filter(link => link.panorama_end_id === panorama.id)
+                    .length
+
+                if (existing_link_count > 0) {
+                    alert("Hubungan telah ada.")
+                    return
+                }
+
+                modal.confirmationModal()
+                    .then(response => {
+                        if (!response.value) { throw new Error() }
+                        return axios.post(`/panorama-link`, {
+                            panorama_start_id: this.selected_panorama.id,
+                            panorama_end_id: panorama.id,
+                        })
+                    })
+                    .then(response => {
+                        this.selected_panorama.panorama_links.push(response.data.start_link)
+
+                        panorama.panorama_links.push(response.data.end_link)
+                        this.gmap_panorama.setPano(`${panorama.id}`)
+
+                        return modal.successModal()
+                    })
+                    .then(() => {
+                        this.in_connecting_mode = false
+                    })
+                    .catch(error => {
+                        this.in_connecting_mode = false
+                        modal.errorModal()
+                    })
+            },
+
             onMapClick(e) {
                 this.pointer_marker.latitude = e.latLng.lat()
                 this.pointer_marker.longitude = e.latLng.lng()
             },
 
-            onCloseVirtualTourButtonClick() {
+            resetState() {
+                this.in_connecting_mode = false
                 this.selected_panorama = null
+            },
+
+            onCloseVirtualTourButtonClick() {
+                this.resetState()
             },
 
             onPanoramaDeleteButtonClick() {
@@ -144,13 +226,20 @@
                         return modal.successModal()
                     })
                     .then(() => {
-                        this.panoramas = this.panoramas.filter(panorama => panorama.id !== this.selected_panorama.id)
-                        this.selected_panorama = null
-                    })
-            },
+                        this.m_panoramas = this.m_panoramas
+                            .filter(panorama => panorama.id !== this.selected_panorama.id)
+                            .map(panorama => {
+                                return {
+                                    ...panorama,
+                                    panorama_links: panorama.panorama_links.filter(link => {
+                                        return (link.panorama_end_id !== this.selected_panorama.id) &&
+                                            (link.panorama_start_id !== this.selected_panorama.id)
+                                    })
+                                }
+                            })
 
-            onPanoramaMarkerClick(panorama) {
-                this.selected_panorama = panorama
+                        this.resetState()
+                    })
             },
 
             initPanorama(panorama) {
@@ -162,25 +251,19 @@
 
                     /* Register panorama provider */
                     this.gmap_panorama.registerPanoProvider(search_pano_id => {
-                        if (this.panoramas.find(panorama => panorama.id == search_pano_id)) {
-                            return this.getPanoramaData(panorama);
+                        let panorama = this.m_panoramas.find(panorama => panorama.id == search_pano_id)
+                        if (panorama) {
+                            return this.getPanoramaData(panorama)
                         }
 
-
-                        return null;
+                        return null
                     });
 
-                    this.map.setStreetView(this.gmap_panorama);
-
-                    this.gmap_panorama.addListener('pano_changed', () => {
-                        console.log(this.gmap_panorama.pano)
-                    });
-
+                    this.map.setStreetView(this.gmap_panorama)
                     return
                 }
 
                 this.gmap_panorama.setPano(`${panorama.id}`)
-                console
             },
 
             getPanoramaData(panorama) {
@@ -194,8 +277,8 @@
                     links: panorama.panorama_links.map(link => {
                         return {
                             heading: link.heading,
-                            description: '',
-                            pano: link.panorama_end_id,
+                            description: link.end.deskripsi,
+                            pano: `${link.panorama_end_id}`,
                         }
                     }),
 
@@ -203,7 +286,7 @@
                     tiles: {
                         tileSize: new google.maps.Size(1024, 512),
                         worldSize: new google.maps.Size(1024, 512),
-                        heading: 0,
+                        centerHeading: 0,
                         getTileUrl: (pano, zoom, tileX, tileY) => {
                             return `/panorama-image/${panorama.id}/${zoom}/${tileX}/${tileY}`;
                         }
@@ -211,16 +294,5 @@
                 };
             },
         },
-
-        computed: {
-            panorama_links() {
-                return this.panoramas.reduce((current, next) => {
-                    return [
-                        ...current,
-                        ...next.panorama_links
-                    ]
-                }, [])
-            }
-        }
     }
 </script>

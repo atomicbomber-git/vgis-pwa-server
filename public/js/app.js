@@ -2192,6 +2192,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modal */ "./resources/js/modal.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2286,6 +2292,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2295,6 +2331,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   data: function data() {
     return {
+      m_panoramas: _toConsumableArray(this.panoramas),
+      in_connecting_mode: false,
       selected_panorama: null,
       pointer_marker: {
         latitude: this.map_config.latitude,
@@ -2319,20 +2357,70 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    onConnectButtonClick: function onConnectButtonClick() {
+      this.in_connecting_mode = !this.in_connecting_mode;
+    },
+    onPanoramaMarkerClick: function onPanoramaMarkerClick(panorama) {
+      var _this2 = this;
+
+      if (!this.in_connecting_mode) {
+        this.selected_panorama = panorama;
+        return;
+      }
+      /* Need to check if there's a link already here */
+
+
+      var existing_link_count = this.selected_panorama.panorama_links.filter(function (link) {
+        return link.panorama_end_id === panorama.id;
+      }).length;
+
+      if (existing_link_count > 0) {
+        alert("Hubungan telah ada.");
+        return;
+      }
+
+      _modal__WEBPACK_IMPORTED_MODULE_0__["default"].confirmationModal().then(function (response) {
+        if (!response.value) {
+          throw new Error();
+        }
+
+        return axios.post("/panorama-link", {
+          panorama_start_id: _this2.selected_panorama.id,
+          panorama_end_id: panorama.id
+        });
+      }).then(function (response) {
+        _this2.selected_panorama.panorama_links.push(response.data.start_link);
+
+        panorama.panorama_links.push(response.data.end_link);
+
+        _this2.gmap_panorama.setPano("".concat(panorama.id));
+
+        return _modal__WEBPACK_IMPORTED_MODULE_0__["default"].successModal();
+      }).then(function () {
+        _this2.in_connecting_mode = false;
+      })["catch"](function (error) {
+        _this2.in_connecting_mode = false;
+        _modal__WEBPACK_IMPORTED_MODULE_0__["default"].errorModal();
+      });
+    },
     onMapClick: function onMapClick(e) {
       this.pointer_marker.latitude = e.latLng.lat();
       this.pointer_marker.longitude = e.latLng.lng();
     },
-    onCloseVirtualTourButtonClick: function onCloseVirtualTourButtonClick() {
+    resetState: function resetState() {
+      this.in_connecting_mode = false;
       this.selected_panorama = null;
     },
+    onCloseVirtualTourButtonClick: function onCloseVirtualTourButtonClick() {
+      this.resetState();
+    },
     onPanoramaDeleteButtonClick: function onPanoramaDeleteButtonClick() {
-      var _this2 = this;
+      var _this3 = this;
 
       _modal__WEBPACK_IMPORTED_MODULE_0__["default"].confirmationModal().then(function (response) {
         if (!response.value) throw new Error();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showLoading();
-        return axios["delete"]("/panorama/".concat(_this2.selected_panorama.id));
+        return axios["delete"]("/panorama/".concat(_this3.selected_panorama.id));
       }).then(function (response) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.hideLoading();
 
@@ -2343,17 +2431,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         return _modal__WEBPACK_IMPORTED_MODULE_0__["default"].successModal();
       }).then(function () {
-        _this2.panoramas = _this2.panoramas.filter(function (panorama) {
-          return panorama.id !== _this2.selected_panorama.id;
+        _this3.m_panoramas = _this3.m_panoramas.filter(function (panorama) {
+          return panorama.id !== _this3.selected_panorama.id;
+        }).map(function (panorama) {
+          return _objectSpread({}, panorama, {
+            panorama_links: panorama.panorama_links.filter(function (link) {
+              return link.panorama_end_id !== _this3.selected_panorama.id && link.panorama_start_id !== _this3.selected_panorama.id;
+            })
+          });
         });
-        _this2.selected_panorama = null;
+
+        _this3.resetState();
       });
     },
-    onPanoramaMarkerClick: function onPanoramaMarkerClick(panorama) {
-      this.selected_panorama = panorama;
-    },
     initPanorama: function initPanorama(panorama) {
-      var _this3 = this;
+      var _this4 = this;
 
       if (!this.gmap_panorama) {
         this.gmap_panorama = new google.maps.StreetViewPanorama(this.$refs.streetview_ref, {
@@ -2362,23 +2454,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         /* Register panorama provider */
 
         this.gmap_panorama.registerPanoProvider(function (search_pano_id) {
-          if (_this3.panoramas.find(function (panorama) {
+          var panorama = _this4.m_panoramas.find(function (panorama) {
             return panorama.id == search_pano_id;
-          })) {
-            return _this3.getPanoramaData(panorama);
+          });
+
+          if (panorama) {
+            return _this4.getPanoramaData(panorama);
           }
 
           return null;
         });
         this.map.setStreetView(this.gmap_panorama);
-        this.gmap_panorama.addListener('pano_changed', function () {
-          console.log(_this3.gmap_panorama.pano);
-        });
         return;
       }
 
       this.gmap_panorama.setPano("".concat(panorama.id));
-      console;
     },
     getPanoramaData: function getPanoramaData(panorama) {
       return {
@@ -2391,27 +2481,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         links: panorama.panorama_links.map(function (link) {
           return {
             heading: link.heading,
-            description: '',
-            pano: link.panorama_end_id
+            description: link.end.deskripsi,
+            pano: "".concat(link.panorama_end_id)
           };
         }),
         copyright: 'Imagery (c) 2010 Rizki Oktaviano',
         tiles: {
           tileSize: new google.maps.Size(1024, 512),
           worldSize: new google.maps.Size(1024, 512),
-          heading: 0,
+          centerHeading: 0,
           getTileUrl: function getTileUrl(pano, zoom, tileX, tileY) {
             return "/panorama-image/".concat(panorama.id, "/").concat(zoom, "/").concat(tileX, "/").concat(tileY);
           }
         }
       };
-    }
-  },
-  computed: {
-    panorama_links: function panorama_links() {
-      return this.panoramas.reduce(function (current, next) {
-        return [].concat(_toConsumableArray(current), _toConsumableArray(next.panorama_links));
-      }, []);
     }
   }
 });
@@ -42695,20 +42778,29 @@ var render = function() {
             _vm.selected_panorama
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-body" }, [
+                    _vm.in_connecting_mode
+                      ? _c("div", { staticClass: "alert alert-warning" }, [
+                          _c("i", { staticClass: "fas fa-info-circle  " }),
+                          _vm._v(
+                            "\n                                Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama\n                                lain untuk membuat hubungan baru.\n                            "
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
                     _c("h2", { staticClass: "h4" }, [
                       _c("i", { staticClass: "fas fa-map-marker" }),
                       _vm._v(
-                        "\n                            " +
+                        "\n                                " +
                           _vm._s(_vm.selected_panorama.nama) +
-                          "\n                        "
+                          "\n                            "
                       )
                     ]),
                     _vm._v(" "),
                     _c("p", [
                       _vm._v(
-                        "\n                            " +
+                        "\n                                " +
                           _vm._s(_vm.selected_panorama.deskripsi) +
-                          "\n                        "
+                          "\n                            "
                       )
                     ]),
                     _vm._v(" "),
@@ -42728,7 +42820,7 @@ var render = function() {
                               },
                               [
                                 _vm._v(
-                                  "\n                                    Tutup Virtual Tour\n                                    "
+                                  "\n                                        Tutup VT\n                                        "
                                 ),
                                 _c("i", {
                                   staticClass: "fas fa-arrow-circle-left  "
@@ -42742,6 +42834,30 @@ var render = function() {
                           "div",
                           { staticClass: "d-flex justify-content-end" },
                           [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm mr-2",
+                                class: {
+                                  "btn-primary": !this.in_connecting_mode,
+                                  "btn-warning": this.in_connecting_mode
+                                },
+                                on: { click: _vm.onConnectButtonClick }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                        " +
+                                    _vm._s(
+                                      !this.in_connecting_mode
+                                        ? "Hubungkan"
+                                        : "Batal Hubungkan"
+                                    ) +
+                                    "\n                                        "
+                                ),
+                                _c("i", { staticClass: "fas fa-link" })
+                              ]
+                            ),
+                            _vm._v(" "),
                             _c(
                               "form",
                               {
@@ -42793,7 +42909,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("button", { staticClass: "btn btn-danger btn-sm" }, [
       _vm._v(
-        "\n                                        Hapus\n                                        "
+        "\n                                            Hapus\n                                            "
       ),
       _c("i", { staticClass: "fas fa-trash-alt " })
     ])
