@@ -26,6 +26,20 @@
 
                             </gmap-info-window>
 
+
+                            <gmap-polyline
+                                v-if="in_connecting_mode && current_mouse_position"
+                                :options="{
+                                    strokeColor: '#ffc800',
+                                    strokeOpacity: 0.5,
+                                    strokeWeight: 2
+                                }"
+                                :path="[
+                                    {lat: selected_panorama.latitude, lng: selected_panorama.longitude},
+                                    {lat: current_mouse_position.latitude, lng: current_mouse_position.longitude}
+                                ]"
+                            />
+
                             <template v-for="panorama in panoramas">
                                 <!-- Marker penanda lokasi panorama -->
                                 <gmap-marker
@@ -37,9 +51,9 @@
                                 <!-- Poligon panorama -->
                                 <gmap-polyline
                                     :options="{
-                                    strokeColor: '#FF0000',
+                                    strokeColor: '#9a3737',
                                     strokeOpacity: 0.5,
-                                    strokeWeight: 4
+                                    strokeWeight: 2
                                 }"
                                     v-for="link in panorama.panorama_links"
                                     @click="onPanoramaLinkLineClick($event, link)"
@@ -54,14 +68,6 @@
                     <div class="card"
                          v-if="selected_panorama">
                         <div class="card-body">
-                            <div
-                                v-if="in_connecting_mode"
-                                class="alert alert-warning">
-                                <i class="fas fa-info-circle  "></i>
-                                Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama
-                                lain untuk membuat hubungan baru.
-                            </div>
-
                             <h2 class="h4">
                                 <i class="fas fa-map-marker"></i>
                                 {{ selected_panorama.nama }}
@@ -121,6 +127,7 @@
 <script>
     import modal from "../modal";
     import Swal from "sweetalert2"
+    import { throttle } from "lodash"
 
     export default {
         props: {
@@ -132,15 +139,24 @@
             return {
                 m_panoramas: [...this.panoramas],
                 in_connecting_mode: false,
+
                 selected_panorama: null,
                 selected_panorama_link_position: null,
                 selected_panorama_link: null,
+                current_mouse_position: null,
             }
         },
 
         mounted() {
             this.$refs.map_ref.$mapPromise.then(map => {
                 this.map = map;
+
+                map.addListener('mousemove', throttle(e => {
+                    this.current_mouse_position = {
+                        latitude: e.latLng.lat(),
+                        longitude: e.latLng.lng(),
+                    }
+                }, 200))
             })
         },
 
@@ -180,7 +196,9 @@
                     .length
 
                 if (existing_link_count > 0) {
-                    alert("Hubungan telah ada.")
+                    modal.errorModal({
+                        text: "Connection already exists."
+                    })
                     return
                 }
 

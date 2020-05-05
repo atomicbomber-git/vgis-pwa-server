@@ -2192,6 +2192,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../modal */ "./resources/js/modal.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2330,6 +2332,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2343,7 +2352,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       in_connecting_mode: false,
       selected_panorama: null,
       selected_panorama_link_position: null,
-      selected_panorama_link: null
+      selected_panorama_link: null,
+      current_mouse_position: null
     };
   },
   mounted: function mounted() {
@@ -2351,6 +2361,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     this.$refs.map_ref.$mapPromise.then(function (map) {
       _this.map = map;
+      map.addListener('mousemove', Object(lodash__WEBPACK_IMPORTED_MODULE_2__["throttle"])(function (e) {
+        _this.current_mouse_position = {
+          latitude: e.latLng.lat(),
+          longitude: e.latLng.lng()
+        };
+      }, 200));
     });
   },
   watch: {
@@ -2388,7 +2404,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }).length;
 
       if (existing_link_count > 0) {
-        alert("Hubungan telah ada.");
+        _modal__WEBPACK_IMPORTED_MODULE_0__["default"].errorModal({
+          text: "Connection already exists."
+        });
         return;
       }
 
@@ -42768,6 +42786,28 @@ var render = function() {
                         )
                       : _vm._e(),
                     _vm._v(" "),
+                    _vm.in_connecting_mode && _vm.current_mouse_position
+                      ? _c("gmap-polyline", {
+                          attrs: {
+                            options: {
+                              strokeColor: "#ffc800",
+                              strokeOpacity: 0.5,
+                              strokeWeight: 2
+                            },
+                            path: [
+                              {
+                                lat: _vm.selected_panorama.latitude,
+                                lng: _vm.selected_panorama.longitude
+                              },
+                              {
+                                lat: _vm.current_mouse_position.latitude,
+                                lng: _vm.current_mouse_position.longitude
+                              }
+                            ]
+                          }
+                        })
+                      : _vm._e(),
+                    _vm._v(" "),
                     _vm._l(_vm.panoramas, function(panorama) {
                       return [
                         _c("gmap-marker", {
@@ -42790,9 +42830,9 @@ var render = function() {
                             key: link.id,
                             attrs: {
                               options: {
-                                strokeColor: "#FF0000",
+                                strokeColor: "#9a3737",
                                 strokeOpacity: 0.5,
-                                strokeWeight: 4
+                                strokeWeight: 2
                               },
                               path: [
                                 {
@@ -42824,15 +42864,6 @@ var render = function() {
             _vm.selected_panorama
               ? _c("div", { staticClass: "card" }, [
                   _c("div", { staticClass: "card-body" }, [
-                    _vm.in_connecting_mode
-                      ? _c("div", { staticClass: "alert alert-warning" }, [
-                          _c("i", { staticClass: "fas fa-info-circle  " }),
-                          _vm._v(
-                            "\n                            Anda berada pada mode penghubungan panorama. Silahkan klik penanda panorama\n                            lain untuk membuat hubungan baru.\n                        "
-                          )
-                        ])
-                      : _vm._e(),
-                    _vm._v(" "),
                     _c("h2", { staticClass: "h4" }, [
                       _c("i", { staticClass: "fas fa-map-marker" }),
                       _vm._v(
