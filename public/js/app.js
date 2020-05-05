@@ -2322,6 +2322,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2334,6 +2348,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       m_panoramas: _toConsumableArray(this.panoramas),
       in_connecting_mode: false,
       selected_panorama: null,
+      selected_panorama_link_position: null,
       pointer_marker: {
         latitude: this.map_config.latitude,
         longitude: this.map_config.longitude
@@ -2357,6 +2372,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    onPanoramaLinkLineClick: function onPanoramaLinkLineClick(e) {
+      this.pointer_marker.latitude = e.latLng.lat();
+      this.pointer_marker.longitude = e.latLng.lng();
+    },
     onConnectButtonClick: function onConnectButtonClick() {
       this.in_connecting_mode = !this.in_connecting_mode;
     },
@@ -42741,6 +42760,17 @@ var render = function() {
                   }
                 }),
                 _vm._v(" "),
+                _vm.selected_panorama_link_position
+                  ? _c("gmap-info-window", {
+                      attrs: {
+                        position: {
+                          lat: _vm.selected_panorama_link_position.latitude,
+                          lng: _vm.selected_panorama_link_position.longitude
+                        }
+                      }
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
                 _vm._l(_vm.panoramas, function(panorama) {
                   return [
                     _c("gmap-marker", {
@@ -42759,14 +42789,20 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _vm._l(panorama.panorama_links, function(link) {
-                      return _c("GmapPolyline", {
+                      return _c("gmap-polyline", {
                         key: link.id,
                         attrs: {
+                          options: {
+                            strokeColor: "#FF0000",
+                            strokeOpacity: 0.5,
+                            strokeWeight: 4
+                          },
                           path: [
                             { lat: panorama.latitude, lng: panorama.longitude },
                             { lat: link.end.latitude, lng: link.end.longitude }
                           ]
-                        }
+                        },
+                        on: { click: _vm.onPanoramaLinkLineClick }
                       })
                     })
                   ]

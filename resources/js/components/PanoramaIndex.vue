@@ -18,6 +18,14 @@
                             :position="{lat: pointer_marker.latitude, lng: pointer_marker.longitude}"
                         />
 
+                        <gmap-info-window
+                            v-if="selected_panorama_link_position"
+                            :position="{
+                                lat: selected_panorama_link_position.latitude,
+                                lng: selected_panorama_link_position.longitude
+                            }"
+                        ></gmap-info-window>
+
                         <template v-for="panorama in panoramas">
                             <!-- Marker penanda lokasi panorama -->
                             <gmap-marker
@@ -27,7 +35,13 @@
                             />
 
                             <!-- Poligon panorama -->
-                            <GmapPolyline
+                            <gmap-polyline
+                                @click="onPanoramaLinkLineClick"
+                                :options="{
+                                    strokeColor: '#FF0000',
+                                    strokeOpacity: 0.5,
+                                    strokeWeight: 4
+                                }"
                                 v-for="link in panorama.panorama_links"
                                 :key="link.id"
                                 :path="[{lat: panorama.latitude, lng: panorama.longitude}, {lat: link.end.latitude, lng: link.end.longitude}]"
@@ -125,6 +139,7 @@
                 m_panoramas: [...this.panoramas],
                 in_connecting_mode: false,
                 selected_panorama: null,
+                selected_panorama_link_position: null,
                 pointer_marker: {
                     latitude: this.map_config.latitude,
                     longitude: this.map_config.longitude,
@@ -149,6 +164,11 @@
         },
 
         methods: {
+            onPanoramaLinkLineClick(e) {
+                this.pointer_marker.latitude = e.latLng.lat()
+                this.pointer_marker.longitude = e.latLng.lng()
+            },
+
             onConnectButtonClick() {
                 this.in_connecting_mode = !this.in_connecting_mode
             },

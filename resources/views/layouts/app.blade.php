@@ -87,18 +87,6 @@
                                         Panorama
                                     </a>
                                 </div>
-
-                                <div class="nav-item">
-                                    <a class="px-0" href="{{ route("panorama-link.index") }}">
-                                        Link Panorama
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="my-3">
-                                <div class="font-weight-bold text-uppercase border-bottom">
-                                    Operasi
-                                </div>
                             </div>
                         </nav>
                     </aside>
