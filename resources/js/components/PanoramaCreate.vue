@@ -41,7 +41,7 @@
         <div class="col-md border p-3">
 
             <fieldset>
-                <legend> Data New Panorama</legend>
+                <legend> Data </legend>
 
                 <form @submit.prevent="onFormSubmit">
                     <div class="form-group row">
@@ -91,13 +91,13 @@
 
                     <div class="form-group">
                         <label for="name">
-                            Nama:
+                            Name:
                         </label>
 
                         <input
                             v-model.number="name"
                             class="form-control"
-                            placeholder="Nama"
+                            placeholder="Name"
                             :class="{
                                 'is-invalid': get(error_data, 'errors.name[0]', false)
                             }"
@@ -111,13 +111,13 @@
 
                     <div class="form-group">
                         <label for="description">
-                            Deskripsi:
+                            Description:
                         </label>
 
                         <textarea
                             v-model.number="description"
                             class="form-control"
-                            placeholder="Deskripsi"
+                            placeholder="Description"
                             :class="{
                                 'is-invalid': get(error_data, 'errors.description[0]', false)
                             }"

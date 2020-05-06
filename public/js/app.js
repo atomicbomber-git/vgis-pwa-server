@@ -42801,7 +42801,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-md border p-3" }, [
       _c("fieldset", [
-        _c("legend", [_vm._v(" Data New Panorama")]),
+        _c("legend", [_vm._v(" Data ")]),
         _vm._v(" "),
         _c(
           "form",
@@ -42939,7 +42939,7 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "name" } }, [
-                _vm._v("\n                        Nama:\n                    ")
+                _vm._v("\n                        Name:\n                    ")
               ]),
               _vm._v(" "),
               _c("input", {
@@ -42956,7 +42956,7 @@ var render = function() {
                 class: {
                   "is-invalid": _vm.get(_vm.error_data, "errors.name[0]", false)
                 },
-                attrs: { placeholder: "Nama", id: "name", type: "text" },
+                attrs: { placeholder: "Name", id: "name", type: "text" },
                 domProps: { value: _vm.name },
                 on: {
                   input: function($event) {
@@ -42983,7 +42983,7 @@ var render = function() {
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "description" } }, [
                 _vm._v(
-                  "\n                        Deskripsi:\n                    "
+                  "\n                        Description:\n                    "
                 )
               ]),
               _vm._v(" "),
@@ -43006,7 +43006,7 @@ var render = function() {
                   )
                 },
                 attrs: {
-                  placeholder: "Deskripsi",
+                  placeholder: "Description",
                   id: "description",
                   type: "text"
                 },
@@ -43172,7 +43172,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-md border p-3" }, [
       _c("fieldset", [
-        _c("legend", [_vm._v(" Panorama Data ")]),
+        _c("legend", [_vm._v(" Data ")]),
         _vm._v(" "),
         _c(
           "form",

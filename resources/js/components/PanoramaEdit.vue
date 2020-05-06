@@ -41,7 +41,7 @@
         <div class="col-md border p-3">
 
             <fieldset>
-                <legend> Panorama Data </legend>
+                <legend> Data </legend>
 
                 <form @submit.prevent="onFormSubmit">
                     <div class="form-group row">
