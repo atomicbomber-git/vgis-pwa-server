@@ -6,8 +6,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Panorama::class, function (Faker $faker) {
     return [
-        'nama' => $faker->company,
-        'deskripsi' => $faker->text,
+        'name' => $faker->company,
+        'description' => $faker->text,
         'latitude' => rand(-50, 50) / 1000 + -0.026330,
         'longitude' => rand(-50, 50) / 1000 + 109.342504,
     ];

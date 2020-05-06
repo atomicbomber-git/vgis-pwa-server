@@ -104,7 +104,7 @@
                 return {
                     location: {
                         pano: panorama.id,  // The ID for this custom panorama.
-                        description: panorama.nama,
+                        description: panorama.name,
                         latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
                     },
 

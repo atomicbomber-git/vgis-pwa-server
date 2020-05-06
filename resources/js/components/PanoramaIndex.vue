@@ -40,7 +40,7 @@
                                 ]"
                             />
 
-                            <template v-for="panorama in panoramas">
+                            <template v-for="panorama in m_panoramas">
                                 <!-- Marker penanda lokasi panorama -->
                                 <gmap-marker
                                     :key="panorama.id + '_marker'"
@@ -70,11 +70,46 @@
                         <div class="card-body">
                             <h2 class="h4">
                                 <i class="fas fa-map-marker"></i>
-                                {{ selected_panorama.nama }}
+                                {{ selected_panorama.name }}
                             </h2>
                             <p>
-                                {{ selected_panorama.deskripsi }}
+                                {{ selected_panorama.description }}
                             </p>
+
+                            <div style="max-height: 100px; overflow-y: scroll" class="my-2">
+                                <div
+                                    v-if="this.selected_panorama.panorama_links.length === 0"
+                                    class="alert alert-info">
+                                    This panorama doesn't have any link.
+                                </div>
+
+
+                                <table
+                                    v-if="this.selected_panorama.panorama_links.length > 0"
+                                    class="table table-sm table-bordered table-striped">
+                                    <thead class="thead thead-dark">
+                                    <tr>
+                                        <th> # </th>
+                                        <th> Target </th>
+                                        <th class="text-center">
+                                            <i class="fas fa-wrench"></i>
+                                        </th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                    <tr v-for="(link, index) in selected_panorama.panorama_links">
+                                        <td> {{ index + 1 }}</td>
+                                        <td> {{ link.end.name }}</td>
+                                        <td class="text-center">
+                                            <button @click="onLinkDeleteButtonClick(link)" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex justify-content-start">
@@ -99,6 +134,13 @@
                                         {{ !this.in_connecting_mode ? 'Connect' : 'Connect (Cancel)' }}
                                         <i class="fas fa-link"></i>
                                     </button>
+
+                                    <a class="btn btn-primary btn-sm mr-2"
+                                        :href="`/panorama/${selected_panorama.id}/edit`"
+                                    >
+                                        Edit
+                                        <i class="fas fa-pencil-alt  "></i>
+                                    </a>
 
 
                                     <form @submit.prevent="onPanoramaDeleteButtonClick">
@@ -127,7 +169,7 @@
 <script>
     import modal from "../modal";
     import Swal from "sweetalert2"
-    import { throttle } from "lodash"
+    import {throttle} from "lodash"
 
     export default {
         props: {
@@ -171,6 +213,58 @@
         },
 
         methods: {
+            panoramaLinksToSVLinks(panorama_links) {
+                return panorama_links.map(link => {
+                    return {
+                        heading: link.heading,
+                        description: link.end.description,
+                        pano: `${link.panorama_end_id}`,
+                    }
+                })
+            },
+
+            onLinkDeleteButtonClick(link) {
+                modal.confirmationModal()
+                    .then(response => {
+                        if (!response.value) { throw new Error() }
+                        return axios.delete(`/panorama-link/${link.id}`);
+                    })
+                    .then(response => {
+                        /* Revise links */
+                        this.m_panoramas = this.m_panoramas.map(panorama => {
+                            return {
+                                ...panorama,
+                                panorama_links: panorama.panorama_links.filter(p_link => {
+                                    if (
+                                        (p_link.panorama_start_id === link.panorama_start_id) &&
+                                        (p_link.panorama_end_id === link.panorama_end_id)
+                                    ) {
+                                        return false
+                                    }
+
+                                    if (
+                                        (p_link.panorama_start_id === link.panorama_end_id) &&
+                                        (p_link.panorama_end_id === link.panorama_start_id)
+                                    ) { return false }
+
+                                    return true
+                                })
+                            }
+                        })
+
+                        this.gmap_panorama.setLinks(
+                            this.panoramaLinksToSVLinks(this.selected_panorama.panorama_links)
+                        )
+
+                        this.selected_panorama = this.m_panoramas.find(pano => pano.id === this.selected_panorama.id)
+                        modal.successModal()
+                    })
+                    .catch(error => {
+                        if (!error.isAxiosError) { return }
+                        modal.errorModal()
+                    })
+            },
+
             onPanoramaLinkLineClick(e, link) {
                 this.selected_panorama_link_position = {
                     latitude: e.latLng.lat(),
@@ -213,10 +307,14 @@
                         })
                     })
                     .then(response => {
+                        // Update existing links with the new ones
                         this.selected_panorama.panorama_links.push(response.data.start_link)
-
                         panorama.panorama_links.push(response.data.end_link)
-                        this.gmap_panorama.setPano(`${panorama.id}`)
+
+                        // Refresh panorama
+                        this.gmap_panorama.setLinks(
+                            this.panoramaLinksToSVLinks(this.selected_panorama.panorama_links)
+                        )
 
                         return modal.successModal()
                     })
@@ -300,17 +398,11 @@
                 return {
                     location: {
                         pano: `${panorama.id}`,  // The ID for this custom panorama.
-                        description: panorama.nama,
+                        description: panorama.name,
                         latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
                     },
 
-                    links: panorama.panorama_links.map(link => {
-                        return {
-                            heading: link.heading,
-                            description: link.end.deskripsi,
-                            pano: `${link.panorama_end_id}`,
-                        }
-                    }),
+                    links: this.panoramaLinksToSVLinks(panorama.panorama_links),
 
                     copyright: 'Imagery (c) 2010 Rizki Oktaviano',
                     tiles: {

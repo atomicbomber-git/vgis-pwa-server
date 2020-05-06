@@ -15,8 +15,8 @@ class CreatePanoramasTable extends Migration
     {
         Schema::create('panorama', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nama');
-            $table->text('deskripsi');
+            $table->string('name');
+            $table->text('description');
 
             $table->double('latitude')->nullable();
         $table->double('longitude')->nullable();

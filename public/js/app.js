@@ -2097,8 +2097,8 @@ __webpack_require__.r(__webpack_exports__);
         latitude: this.map_config.latitude,
         longitude: this.map_config.longitude
       },
-      nama: null,
-      deskripsi: null,
+      name: null,
+      description: null,
       image_file: null,
       image_file_url: null
     };
@@ -2126,8 +2126,8 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     form_data: function form_data() {
       return {
-        nama: this.nama,
-        deskripsi: this.deskripsi,
+        name: this.name,
+        description: this.description,
         latitude: this.pointer_marker.latitude,
         longitude: this.pointer_marker.longitude,
         image: this.image_file
@@ -2170,6 +2170,298 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function () {
         window.location.replace(_this3.redirect_url);
       })["catch"](function (error) {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.close();
+        var error_data = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(error, "response.data", null);
+        if (error_data) _this3.error_data = error_data;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../modal */ "./resources/js/modal.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_3__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    map_config: Object,
+    panoramas: Array,
+    submit_url: String,
+    redirect_url: String,
+    panorama: Object
+  },
+  data: function data() {
+    return {
+      selected_panorama: null,
+      pointer_marker: {
+        latitude: this.panorama.latitude,
+        longitude: this.panorama.longitude
+      },
+      name: this.panorama.name,
+      description: this.panorama.description,
+      image_file: null,
+      image_file_url: null
+    };
+  },
+  watch: {
+    image_file: function image_file(new_image_file) {
+      var _this = this;
+
+      if (new_image_file === null) {
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        _this.image_file_url = reader.result;
+      }, false);
+      reader.readAsDataURL(new_image_file);
+    }
+  },
+  computed: {
+    form_data: function form_data() {
+      return {
+        name: this.name,
+        description: this.description,
+        latitude: this.pointer_marker.latitude,
+        longitude: this.pointer_marker.longitude,
+        image: this.image_file,
+        _method: 'put'
+      };
+    },
+    processed_form_data: function processed_form_data() {
+      var _this2 = this;
+
+      var formData = new FormData();
+      Object.keys(this.form_data).forEach(function (key) {
+        if (_this2.form_data[key]) {
+          formData.append(key, _this2.form_data[key]);
+        }
+      });
+      return formData;
+    }
+  },
+  methods: {
+    onMapClick: function onMapClick(e) {
+      this.pointer_marker.latitude = e.latLng.lat();
+      this.pointer_marker.longitude = e.latLng.lng();
+    },
+    onGambarInputChange: function onGambarInputChange(e) {
+      this.image_file = e.target.files[0];
+    },
+    onFormSubmit: function onFormSubmit() {
+      var _this3 = this;
+
+      _modal__WEBPACK_IMPORTED_MODULE_1__["default"].confirmationModal().then(function (result) {
+        if (!result.value) throw new Error();
+        _modal__WEBPACK_IMPORTED_MODULE_1__["default"].loadingModal();
+        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(_this3.submit_url, _this3.processed_form_data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+      }).then(function () {
+        sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.close();
+        return _modal__WEBPACK_IMPORTED_MODULE_1__["default"].successModal();
+      }).then(function () {
+        window.location.replace(_this3.redirect_url);
+      })["catch"](function (error) {
+        if (!error.isAxiosError) {
+          return;
+        }
+
         sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.close();
         var error_data = Object(lodash__WEBPACK_IMPORTED_MODULE_2__["get"])(error, "response.data", null);
         if (error_data) _this3.error_data = error_data;
@@ -2338,6 +2630,48 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2379,6 +2713,56 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    panoramaLinksToSVLinks: function panoramaLinksToSVLinks(panorama_links) {
+      return panorama_links.map(function (link) {
+        return {
+          heading: link.heading,
+          description: link.end.description,
+          pano: "".concat(link.panorama_end_id)
+        };
+      });
+    },
+    onLinkDeleteButtonClick: function onLinkDeleteButtonClick(link) {
+      var _this2 = this;
+
+      _modal__WEBPACK_IMPORTED_MODULE_0__["default"].confirmationModal().then(function (response) {
+        if (!response.value) {
+          throw new Error();
+        }
+
+        return axios["delete"]("/panorama-link/".concat(link.id));
+      }).then(function (response) {
+        /* Revise links */
+        _this2.m_panoramas = _this2.m_panoramas.map(function (panorama) {
+          return _objectSpread({}, panorama, {
+            panorama_links: panorama.panorama_links.filter(function (p_link) {
+              if (p_link.panorama_start_id === link.panorama_start_id && p_link.panorama_end_id === link.panorama_end_id) {
+                return false;
+              }
+
+              if (p_link.panorama_start_id === link.panorama_end_id && p_link.panorama_end_id === link.panorama_start_id) {
+                return false;
+              }
+
+              return true;
+            })
+          });
+        });
+
+        _this2.gmap_panorama.setLinks(_this2.panoramaLinksToSVLinks(_this2.selected_panorama.panorama_links));
+
+        _this2.selected_panorama = _this2.m_panoramas.find(function (pano) {
+          return pano.id === _this2.selected_panorama.id;
+        });
+        _modal__WEBPACK_IMPORTED_MODULE_0__["default"].successModal();
+      })["catch"](function (error) {
+        if (!error.isAxiosError) {
+          return;
+        }
+
+        _modal__WEBPACK_IMPORTED_MODULE_0__["default"].errorModal();
+      });
+    },
     onPanoramaLinkLineClick: function onPanoramaLinkLineClick(e, link) {
       this.selected_panorama_link_position = {
         latitude: e.latLng.lat(),
@@ -2390,7 +2774,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.in_connecting_mode = !this.in_connecting_mode;
     },
     onPanoramaMarkerClick: function onPanoramaMarkerClick(panorama) {
-      var _this2 = this;
+      var _this3 = this;
 
       if (!this.in_connecting_mode) {
         this.selected_panorama = panorama;
@@ -2416,21 +2800,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         }
 
         return axios.post("/panorama-link", {
-          panorama_start_id: _this2.selected_panorama.id,
+          panorama_start_id: _this3.selected_panorama.id,
           panorama_end_id: panorama.id
         });
       }).then(function (response) {
-        _this2.selected_panorama.panorama_links.push(response.data.start_link);
+        // Update existing links with the new ones
+        _this3.selected_panorama.panorama_links.push(response.data.start_link);
 
-        panorama.panorama_links.push(response.data.end_link);
+        panorama.panorama_links.push(response.data.end_link); // Refresh panorama
 
-        _this2.gmap_panorama.setPano("".concat(panorama.id));
+        _this3.gmap_panorama.setLinks(_this3.panoramaLinksToSVLinks(_this3.selected_panorama.panorama_links));
 
         return _modal__WEBPACK_IMPORTED_MODULE_0__["default"].successModal();
       }).then(function () {
-        _this2.in_connecting_mode = false;
+        _this3.in_connecting_mode = false;
       })["catch"](function (error) {
-        _this2.in_connecting_mode = false;
+        _this3.in_connecting_mode = false;
         _modal__WEBPACK_IMPORTED_MODULE_0__["default"].errorModal();
       });
     },
@@ -2442,12 +2827,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.resetState();
     },
     onPanoramaDeleteButtonClick: function onPanoramaDeleteButtonClick() {
-      var _this3 = this;
+      var _this4 = this;
 
       _modal__WEBPACK_IMPORTED_MODULE_0__["default"].confirmationModal().then(function (response) {
         if (!response.value) throw new Error();
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.showLoading();
-        return axios["delete"]("/panorama/".concat(_this3.selected_panorama.id));
+        return axios["delete"]("/panorama/".concat(_this4.selected_panorama.id));
       }).then(function (response) {
         sweetalert2__WEBPACK_IMPORTED_MODULE_1___default.a.hideLoading();
 
@@ -2458,21 +2843,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         return _modal__WEBPACK_IMPORTED_MODULE_0__["default"].successModal();
       }).then(function () {
-        _this3.m_panoramas = _this3.m_panoramas.filter(function (panorama) {
-          return panorama.id !== _this3.selected_panorama.id;
+        _this4.m_panoramas = _this4.m_panoramas.filter(function (panorama) {
+          return panorama.id !== _this4.selected_panorama.id;
         }).map(function (panorama) {
           return _objectSpread({}, panorama, {
             panorama_links: panorama.panorama_links.filter(function (link) {
-              return link.panorama_end_id !== _this3.selected_panorama.id && link.panorama_start_id !== _this3.selected_panorama.id;
+              return link.panorama_end_id !== _this4.selected_panorama.id && link.panorama_start_id !== _this4.selected_panorama.id;
             })
           });
         });
 
-        _this3.resetState();
+        _this4.resetState();
       });
     },
     initPanorama: function initPanorama(panorama) {
-      var _this4 = this;
+      var _this5 = this;
 
       if (!this.gmap_panorama) {
         this.gmap_panorama = new google.maps.StreetViewPanorama(this.$refs.streetview_ref, {
@@ -2481,12 +2866,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         /* Register panorama provider */
 
         this.gmap_panorama.registerPanoProvider(function (search_pano_id) {
-          var panorama = _this4.m_panoramas.find(function (panorama) {
+          var panorama = _this5.m_panoramas.find(function (panorama) {
             return panorama.id == search_pano_id;
           });
 
           if (panorama) {
-            return _this4.getPanoramaData(panorama);
+            return _this5.getPanoramaData(panorama);
           }
 
           return null;
@@ -2502,16 +2887,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         location: {
           pano: "".concat(panorama.id),
           // The ID for this custom panorama.
-          description: panorama.nama,
+          description: panorama.name,
           latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
         },
-        links: panorama.panorama_links.map(function (link) {
-          return {
-            heading: link.heading,
-            description: link.end.deskripsi,
-            pano: "".concat(link.panorama_end_id)
-          };
-        }),
+        links: this.panoramaLinksToSVLinks(panorama.panorama_links),
         copyright: 'Imagery (c) 2010 Rizki Oktaviano',
         tiles: {
           tileSize: new google.maps.Size(1024, 512),
@@ -2643,7 +3022,7 @@ __webpack_require__.r(__webpack_exports__);
         location: {
           pano: panorama.id,
           // The ID for this custom panorama.
-          description: panorama.nama,
+          description: panorama.name,
           latLng: new google.maps.LatLng(panorama.latitude, panorama.longitude)
         },
         copyright: 'Imagery (c) 2010 Rizki Oktaviano',
@@ -42422,7 +42801,7 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "col-md border p-3" }, [
       _c("fieldset", [
-        _c("legend", [_vm._v(" Data Panorama Baru")]),
+        _c("legend", [_vm._v(" Data New Panorama")]),
         _vm._v(" "),
         _c(
           "form",
@@ -42559,7 +42938,7 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "nama" } }, [
+              _c("label", { attrs: { for: "name" } }, [
                 _vm._v("\n                        Nama:\n                    ")
               ]),
               _vm._v(" "),
@@ -42568,23 +42947,23 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model.number",
-                    value: _vm.nama,
-                    expression: "nama",
+                    value: _vm.name,
+                    expression: "name",
                     modifiers: { number: true }
                   }
                 ],
                 staticClass: "form-control",
                 class: {
-                  "is-invalid": _vm.get(_vm.error_data, "errors.nama[0]", false)
+                  "is-invalid": _vm.get(_vm.error_data, "errors.name[0]", false)
                 },
-                attrs: { placeholder: "Nama", id: "nama", type: "text" },
-                domProps: { value: _vm.nama },
+                attrs: { placeholder: "Nama", id: "name", type: "text" },
+                domProps: { value: _vm.name },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.nama = _vm._n($event.target.value)
+                    _vm.name = _vm._n($event.target.value)
                   },
                   blur: function($event) {
                     return _vm.$forceUpdate()
@@ -42595,14 +42974,14 @@ var render = function() {
               _c("span", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                        " +
-                    _vm._s(_vm.get(_vm.error_data, "errors.nama[0]", "")) +
+                    _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
                     "\n                    "
                 )
               ])
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "deskripsi" } }, [
+              _c("label", { attrs: { for: "description" } }, [
                 _vm._v(
                   "\n                        Deskripsi:\n                    "
                 )
@@ -42613,8 +42992,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model.number",
-                    value: _vm.deskripsi,
-                    expression: "deskripsi",
+                    value: _vm.description,
+                    expression: "description",
                     modifiers: { number: true }
                   }
                 ],
@@ -42622,22 +43001,22 @@ var render = function() {
                 class: {
                   "is-invalid": _vm.get(
                     _vm.error_data,
-                    "errors.deskripsi[0]",
+                    "errors.description[0]",
                     false
                   )
                 },
                 attrs: {
                   placeholder: "Deskripsi",
-                  id: "deskripsi",
+                  id: "description",
                   type: "text"
                 },
-                domProps: { value: _vm.deskripsi },
+                domProps: { value: _vm.description },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.deskripsi = _vm._n($event.target.value)
+                    _vm.description = _vm._n($event.target.value)
                   },
                   blur: function($event) {
                     return _vm.$forceUpdate()
@@ -42648,7 +43027,9 @@ var render = function() {
               _c("span", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                        " +
-                    _vm._s(_vm.get(_vm.error_data, "errors.deskripsi[0]", "")) +
+                    _vm._s(
+                      _vm.get(_vm.error_data, "errors.description[0]", "")
+                    ) +
                     "\n                    "
                 )
               ])
@@ -42657,18 +43038,15 @@ var render = function() {
             _c("div", { staticClass: "form-group" }, [
               _c("div", { staticClass: "custom-file" }, [
                 _c("input", {
-                  ref: "gambar_input",
+                  ref: "image_input",
                   staticClass: "custom-file-input",
-                  attrs: { type: "file", id: "gambar" },
+                  attrs: { type: "file", id: "image" },
                   on: { change: _vm.onGambarInputChange }
                 }),
                 _vm._v(" "),
                 _c(
                   "label",
-                  {
-                    staticClass: "custom-file-label",
-                    attrs: { for: "gambar" }
-                  },
+                  { staticClass: "custom-file-label", attrs: { for: "image" } },
                   [
                     _vm._v(
                       "\n                            " +
@@ -42708,7 +43086,386 @@ var staticRenderFns = [
     return _c("div", { staticClass: "form-group d-flex justify-content-end" }, [
       _c("input", {
         staticClass: "btn btn-primary",
-        attrs: { value: "Tambahkan", type: "submit" }
+        attrs: { value: "Create", type: "submit" }
+      })
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "row no-gutters" }, [
+    _c("div", { staticClass: "col-md" }, [
+      _c("div", { staticClass: "card" }, [
+        _c(
+          "div",
+          { staticClass: "card-body p-0" },
+          [
+            _c(
+              "gmap-map",
+              {
+                style: {
+                  height: "600px"
+                },
+                attrs: {
+                  center: {
+                    lat: this.panorama.latitude,
+                    lng: this.panorama.longitude
+                  },
+                  zoom: _vm.map_config.zoom,
+                  "map-type-id": "terrain"
+                },
+                on: { click: _vm.onMapClick }
+              },
+              [
+                _c("gmap-marker", {
+                  attrs: {
+                    position: {
+                      lat: _vm.pointer_marker.latitude,
+                      lng: _vm.pointer_marker.longitude
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _vm._l(_vm.panoramas, function(panorama) {
+                  return _c("gmap-marker", {
+                    key: panorama.id,
+                    attrs: {
+                      position: {
+                        lat: panorama.latitude,
+                        lng: panorama.longitude
+                      }
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.onPanoramaMarkerClick(panorama)
+                      }
+                    }
+                  })
+                })
+              ],
+              2
+            )
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-md border p-3" }, [
+      _c("fieldset", [
+        _c("legend", [_vm._v(" Panorama Data ")]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.onFormSubmit($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group row" }, [
+              _c("div", { staticClass: "col" }, [
+                _c("label", { attrs: { for: "latitude" } }, [
+                  _vm._v(
+                    "\n                            Latitude:\n                        "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: _vm.pointer_marker.latitude,
+                      expression: "pointer_marker.latitude",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      _vm.error_data,
+                      "errors.latitude[0]",
+                      false
+                    )
+                  },
+                  attrs: {
+                    placeholder: "Latitude",
+                    id: "latitude",
+                    type: "number",
+                    step: "any"
+                  },
+                  domProps: { value: _vm.pointer_marker.latitude },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.pointer_marker,
+                        "latitude",
+                        _vm._n($event.target.value)
+                      )
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                            " +
+                      _vm._s(
+                        _vm.get(_vm.error_data, "errors.latitude[0]", "")
+                      ) +
+                      "\n                        "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "longitude" } }, [
+                    _vm._v(
+                      "\n                                Longitude:\n                            "
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model.number",
+                        value: _vm.pointer_marker.longitude,
+                        expression: "pointer_marker.longitude",
+                        modifiers: { number: true }
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.get(
+                        _vm.error_data,
+                        "errors.longitude[0]",
+                        false
+                      )
+                    },
+                    attrs: {
+                      placeholder: "Longitude",
+                      id: "longitude",
+                      type: "text"
+                    },
+                    domProps: { value: _vm.pointer_marker.longitude },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.pointer_marker,
+                          "longitude",
+                          _vm._n($event.target.value)
+                        )
+                      },
+                      blur: function($event) {
+                        return _vm.$forceUpdate()
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("span", { staticClass: "invalid-feedback" }, [
+                    _vm._v(
+                      "\n                                " +
+                        _vm._s(
+                          _vm.get(_vm.error_data, "errors.longitude[0]", "")
+                        ) +
+                        "\n                            "
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "name" } }, [
+                _vm._v("\n                        Name:\n                    ")
+              ]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model.number",
+                    value: _vm.name,
+                    expression: "name",
+                    modifiers: { number: true }
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.get(_vm.error_data, "errors.name[0]", false)
+                },
+                attrs: { placeholder: "Name", id: "name", type: "text" },
+                domProps: { value: _vm.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.name = _vm._n($event.target.value)
+                  },
+                  blur: function($event) {
+                    return _vm.$forceUpdate()
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
+                    "\n                    "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "description" } }, [
+                _vm._v(
+                  "\n                        Description:\n                    "
+                )
+              ]),
+              _vm._v(" "),
+              _c("textarea", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model.number",
+                    value: _vm.description,
+                    expression: "description",
+                    modifiers: { number: true }
+                  }
+                ],
+                staticClass: "form-control",
+                class: {
+                  "is-invalid": _vm.get(
+                    _vm.error_data,
+                    "errors.description[0]",
+                    false
+                  )
+                },
+                attrs: {
+                  placeholder: "Description",
+                  id: "description",
+                  type: "text"
+                },
+                domProps: { value: _vm.description },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.description = _vm._n($event.target.value)
+                  },
+                  blur: function($event) {
+                    return _vm.$forceUpdate()
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("span", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(
+                      _vm.get(_vm.error_data, "errors.description[0]", "")
+                    ) +
+                    "\n                    "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "mb-2" }, [_vm._v(" Current Image: ")]),
+              _vm._v(" "),
+              _c("img", {
+                staticClass: "img-fluid rounded-top",
+                attrs: {
+                  src: "/panorama-original-image/" + _vm.panorama.id,
+                  alt: ""
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("div", { staticClass: "mb-2" }, [_vm._v(" New Image: ")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "custom-file" }, [
+                _c("input", {
+                  ref: "image_input",
+                  staticClass: "custom-file-input",
+                  attrs: { type: "file", id: "image" },
+                  on: { change: _vm.onGambarInputChange }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  { staticClass: "custom-file-label", attrs: { for: "image" } },
+                  [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(_vm.get(this.image_file, "name", "Pick Image")) +
+                        "\n                        "
+                    )
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _vm.image_file_url
+                ? _c("img", {
+                    staticClass: "img-fluid rounded-top mt-3",
+                    attrs: { src: _vm.image_file_url, alt: "" }
+                  })
+                : _vm._e()
+            ]),
+            _vm._v(" "),
+            _vm._m(0)
+          ]
+        )
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group d-flex justify-content-end" }, [
+      _c("input", {
+        staticClass: "btn btn-primary",
+        attrs: { value: "Update", type: "submit" }
       })
     ])
   }
@@ -42808,7 +43565,7 @@ var render = function() {
                         })
                       : _vm._e(),
                     _vm._v(" "),
-                    _vm._l(_vm.panoramas, function(panorama) {
+                    _vm._l(_vm.m_panoramas, function(panorama) {
                       return [
                         _c("gmap-marker", {
                           key: panorama.id + "_marker",
@@ -42868,7 +43625,7 @@ var render = function() {
                       _c("i", { staticClass: "fas fa-map-marker" }),
                       _vm._v(
                         "\n                            " +
-                          _vm._s(_vm.selected_panorama.nama) +
+                          _vm._s(_vm.selected_panorama.name) +
                           "\n                        "
                       )
                     ]),
@@ -42876,10 +43633,89 @@ var render = function() {
                     _c("p", [
                       _vm._v(
                         "\n                            " +
-                          _vm._s(_vm.selected_panorama.deskripsi) +
+                          _vm._s(_vm.selected_panorama.description) +
                           "\n                        "
                       )
                     ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "my-2",
+                        staticStyle: {
+                          "max-height": "100px",
+                          "overflow-y": "scroll"
+                        }
+                      },
+                      [
+                        this.selected_panorama.panorama_links.length === 0
+                          ? _c("div", { staticClass: "alert alert-info" }, [
+                              _vm._v(
+                                "\n                                This panorama doesn't have any link.\n                            "
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
+                        this.selected_panorama.panorama_links.length > 0
+                          ? _c(
+                              "table",
+                              {
+                                staticClass:
+                                  "table table-sm table-bordered table-striped"
+                              },
+                              [
+                                _vm._m(0),
+                                _vm._v(" "),
+                                _c(
+                                  "tbody",
+                                  _vm._l(
+                                    _vm.selected_panorama.panorama_links,
+                                    function(link, index) {
+                                      return _c("tr", [
+                                        _c("td", [
+                                          _vm._v(" " + _vm._s(index + 1))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("td", [
+                                          _vm._v(" " + _vm._s(link.end.name))
+                                        ]),
+                                        _vm._v(" "),
+                                        _c(
+                                          "td",
+                                          { staticClass: "text-center" },
+                                          [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass:
+                                                  "btn btn-sm btn-danger",
+                                                on: {
+                                                  click: function($event) {
+                                                    return _vm.onLinkDeleteButtonClick(
+                                                      link
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fas fa-trash-alt"
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ])
+                                    }
+                                  ),
+                                  0
+                                )
+                              ]
+                            )
+                          : _vm._e()
+                      ]
+                    ),
                     _vm._v(" "),
                     _c(
                       "div",
@@ -42936,6 +43772,25 @@ var render = function() {
                             ),
                             _vm._v(" "),
                             _c(
+                              "a",
+                              {
+                                staticClass: "btn btn-primary btn-sm mr-2",
+                                attrs: {
+                                  href:
+                                    "/panorama/" +
+                                    _vm.selected_panorama.id +
+                                    "/edit"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                    Edit\n                                    "
+                                ),
+                                _c("i", { staticClass: "fas fa-pencil-alt  " })
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
                               "form",
                               {
                                 on: {
@@ -42947,7 +43802,7 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._m(0)]
+                              [_vm._m(1)]
                             )
                           ]
                         )
@@ -42979,6 +43834,22 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead thead-dark" }, [
+      _c("tr", [
+        _c("th", [_vm._v(" # ")]),
+        _vm._v(" "),
+        _c("th", [_vm._v(" Target ")]),
+        _vm._v(" "),
+        _c("th", { staticClass: "text-center" }, [
+          _c("i", { staticClass: "fas fa-wrench" })
+        ])
+      ])
+    ])
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -57797,6 +58668,7 @@ module.exports = function(module) {
 
 var map = {
 	"./components/PanoramaCreate.vue": "./resources/js/components/PanoramaCreate.vue",
+	"./components/PanoramaEdit.vue": "./resources/js/components/PanoramaEdit.vue",
 	"./components/PanoramaIndex.vue": "./resources/js/components/PanoramaIndex.vue",
 	"./components/PrimaryMap.vue": "./resources/js/components/PrimaryMap.vue"
 };
@@ -58001,6 +58873,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaCreate_vue_vue_type_template_id_07c3e27c___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaCreate_vue_vue_type_template_id_07c3e27c___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/PanoramaEdit.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/PanoramaEdit.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PanoramaEdit.vue?vue&type=template&id=0b2a928a& */ "./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a&");
+/* harmony import */ var _PanoramaEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./PanoramaEdit.vue?vue&type=script&lang=js& */ "./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _PanoramaEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/PanoramaEdit.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./PanoramaEdit.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PanoramaEdit.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaEdit_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./PanoramaEdit.vue?vue&type=template&id=0b2a928a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/PanoramaEdit.vue?vue&type=template&id=0b2a928a&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PanoramaEdit_vue_vue_type_template_id_0b2a928a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

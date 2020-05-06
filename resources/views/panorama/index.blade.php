@@ -8,12 +8,12 @@
             </a>
         </li>
         <li class="breadcrumb-item active">
-            Daftar Panorama
+            Panorama List
         </li>
     </ol>
 
     <div id="app">
-        <h1> Daftar Panorama </h1>
+        <h1> Panorama List </h1>
 
         @include("layouts._messages")
 
@@ -21,7 +21,7 @@
             <a
                 class="btn btn-primary"
                 href="{{ route('panorama.create') }}">
-                Tambahkan Panorama Baru
+                Create New Panorama
             </a>
         </div>
 

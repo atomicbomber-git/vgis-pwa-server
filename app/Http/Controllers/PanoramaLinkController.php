@@ -66,10 +66,10 @@ class PanoramaLinkController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\PanoramaLink  $panoramaLink
+     * @param  \App\PanoramaLink  $panorama_link
      * @return \Illuminate\Http\Response
      */
-    public function show(PanoramaLink $panoramaLink)
+    public function show(PanoramaLink $panorama_link)
     {
         //
     }
@@ -77,10 +77,10 @@ class PanoramaLinkController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PanoramaLink  $panoramaLink
+     * @param  \App\PanoramaLink  $panorama_link
      * @return \Illuminate\Http\Response
      */
-    public function edit(PanoramaLink $panoramaLink)
+    public function edit(PanoramaLink $panorama_link)
     {
         //
     }
@@ -89,10 +89,10 @@ class PanoramaLinkController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PanoramaLink  $panoramaLink
+     * @param  \App\PanoramaLink  $panorama_link
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PanoramaLink $panoramaLink)
+    public function update(Request $request, PanoramaLink $panorama_link)
     {
         //
     }
@@ -100,11 +100,24 @@ class PanoramaLinkController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PanoramaLink  $panoramaLink
+     * @param  \App\PanoramaLink  $panorama_link
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PanoramaLink $panoramaLink)
+    public function destroy(PanoramaLink $panorama_link)
     {
-        //
+        DB::beginTransaction();
+
+        PanoramaLink::query()
+            ->where([
+                "panorama_end_id" => $panorama_link->panorama_start_id,
+                "panorama_start_id" => $panorama_link->panorama_end_id,
+            ])
+            ->forceDelete();
+
+        $panorama_link->forceDelete();
+
+        DB::commit();
+
+        return new Response('success');
     }
 }

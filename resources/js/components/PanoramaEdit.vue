@@ -6,8 +6,8 @@
                     <gmap-map
                         @click="onMapClick"
                         :center="{
-                            lat: map_config.center.latitude,
-                            lng: map_config.center.longitude
+                            lat: this.panorama.latitude,
+                            lng: this.panorama.longitude
                         }"
                         :zoom="map_config.zoom"
                         :style="{
@@ -41,7 +41,7 @@
         <div class="col-md border p-3">
 
             <fieldset>
-                <legend> Data New Panorama</legend>
+                <legend> Panorama Data </legend>
 
                 <form @submit.prevent="onFormSubmit">
                     <div class="form-group row">
@@ -91,13 +91,13 @@
 
                     <div class="form-group">
                         <label for="name">
-                            Nama:
+                            Name:
                         </label>
 
                         <input
                             v-model.number="name"
                             class="form-control"
-                            placeholder="Nama"
+                            placeholder="Name"
                             :class="{
                                 'is-invalid': get(error_data, 'errors.name[0]', false)
                             }"
@@ -111,13 +111,13 @@
 
                     <div class="form-group">
                         <label for="description">
-                            Deskripsi:
+                            Description:
                         </label>
 
                         <textarea
                             v-model.number="description"
                             class="form-control"
-                            placeholder="Deskripsi"
+                            placeholder="Description"
                             :class="{
                                 'is-invalid': get(error_data, 'errors.description[0]', false)
                             }"
@@ -130,6 +130,16 @@
                     </div>
 
                     <div class="form-group">
+                        <div class="mb-2"> Current Image: </div>
+
+                        <img :src="`/panorama-original-image/${panorama.id}`"
+                             class="img-fluid rounded-top"
+                             alt="">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="mb-2"> New Image: </div>
+
                         <div class="custom-file">
                             <input
                                 @change="onGambarInputChange"
@@ -139,7 +149,7 @@
                                 id="image">
                             <label class="custom-file-label"
                                    for="image">
-                                {{ get(this.image_file, "name", "Pilih Berkas Gambar") }}
+                                {{ get(this.image_file, "name", "Pick Image") }}
                             </label>
                         </div>
 
@@ -152,7 +162,7 @@
 
                     <div class="form-group d-flex justify-content-end">
                         <input
-                            value="Create"
+                            value="Update"
                             class="btn btn-primary"
                             type="submit">
                     </div>
@@ -174,30 +184,25 @@
             panoramas: Array,
             submit_url: String,
             redirect_url: String,
+            panorama: Object
         },
 
         data() {
             return {
                 selected_panorama: null,
                 pointer_marker: {
-                    latitude: this.map_config.latitude,
-                    longitude: this.map_config.longitude,
+                    latitude: this.panorama.latitude,
+                    longitude: this.panorama.longitude,
                 },
 
-                name: null,
-                description: null,
+                name: this.panorama.name,
+                description: this.panorama.description,
                 image_file: null,
                 image_file_url: null,
             }
         },
 
         watch: {
-            selected_panorama(new_selected_panorama) {
-                if (new_selected_panorama === null) {
-                    return
-                }
-            },
-
             image_file(new_image_file) {
                 if (new_image_file === null) { return }
 
@@ -218,6 +223,7 @@
                     latitude: this.pointer_marker.latitude,
                     longitude: this.pointer_marker.longitude,
                     image: this.image_file,
+                    _method: 'put',
                 }
             },
 
@@ -264,6 +270,8 @@
                         window.location.replace(this.redirect_url)
                     })
                     .catch(error => {
+                        if (!error.isAxiosError) { return }
+
                         Swal.close()
                         let error_data = get(error, "response.data", null);
                         if (error_data) this.error_data = error_data;

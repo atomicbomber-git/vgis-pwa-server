@@ -36,7 +36,7 @@ return [
     'different'            => 'Isian :attribute dan :other harus berbeda.',
     'digits'               => 'Isian :attribute harus berupa angka :digits.',
     'digits_between'       => 'Isian :attribute harus antara angka :min dan :max.',
-    'dimensions'           => 'Bidang :attribute tidak memiliki dimensi gambar yang valid.',
+    'dimensions'           => 'Bidang :attribute tidak memiliki dimensi image yang valid.',
     'distinct'             => 'Bidang isian :attribute memiliki nilai yang duplikat.',
     'email'                => 'Isian :attribute harus berupa alamat surel yang valid.',
     'exists'               => 'Isian :attribute yang dipilih tidak valid.',
@@ -54,7 +54,7 @@ return [
         'string'  => 'Isian :attribute harus lebih besar dari atau sama dengan :value karakter.',
         'array'   => 'Isian :attribute harus mempunyai :value item atau lebih.',
     ],
-    'image'                => 'Isian :attribute harus berupa gambar.',
+    'image'                => 'Isian :attribute harus berupa image.',
     'in'                   => 'Isian :attribute yang dipilih tidak valid.',
     'in_array'             => 'Bidang isian :attribute tidak terdapat dalam :other.',
     'integer'              => 'Isian :attribute harus merupakan bilangan bulat.',
@@ -121,7 +121,7 @@ return [
     |---------------------------------------------------------------------------------------
     |
     | Di sini Anda dapat menentukan pesan validasi kustom untuk atribut dengan menggunakan
-    | konvensi "attribute.rule" dalam penamaan baris. Hal ini membuat cepat dalam
+    | konvensi "attribute.rule" dalam penamean baris. Hal ini membuat cepat dalam
     | menentukan spesifik baris bahasa kustom untuk aturan atribut yang diberikan.
     |
     */
@@ -144,13 +144,13 @@ return [
     */
 
     'attributes' => [
-        "description" => "deskripsi",
+        "description" => "description",
         "title" => "judul",
         "document" => "dokumen",
         "year" => "tahun",
         "category_id" => "kategori",
         "content" => "isi",
-        "author_first_name" => "nama depan penulis",
-        "author_last_name" => "nama belakang penulis",
+        "author_first_name" => "name depan penulis",
+        "author_last_name" => "name belakang penulis",
     ],
 ];

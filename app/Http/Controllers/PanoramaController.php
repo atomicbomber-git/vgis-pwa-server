@@ -58,8 +58,8 @@ class PanoramaController extends Controller
     public function store(Request $request)
     {
         $data = collect($request->validate([
-           "nama" => ["required", "string"],
-           "deskripsi" => ["required", "string"],
+           "name" => ["required", "string"],
+           "description" => ["required", "string"],
            "latitude" => ["required", "numeric"],
            "longitude" => ["required", "numeric"],
            "image" => ["required", "image"],
@@ -99,7 +99,13 @@ class PanoramaController extends Controller
      */
     public function edit(Panorama $panorama)
     {
-        //
+        $panoramas = Panorama::query()
+            ->get();
+
+        return response()->view("panorama.edit", compact(
+            "panoramas",
+            "panorama"
+        ));
     }
 
     /**
@@ -111,7 +117,34 @@ class PanoramaController extends Controller
      */
     public function update(Request $request, Panorama $panorama)
     {
-        //
+        $data = collect($request->validate([
+            "name" => ["required", "string"],
+            "description" => ["required", "string"],
+            "latitude" => ["required", "numeric"],
+            "longitude" => ["required", "numeric"],
+            "image" => ["nullable", "image"],
+        ]));
+
+        DB::beginTransaction();
+
+        $panorama->update($data->except(["image"])->toArray());
+
+        if (isset($data["image"])) {
+            $panorama->clearMediaCollection(Panorama::COLLECTION_NAME);
+            $panorama->addMediaFromRequest("image")
+                ->toMediaCollection(Panorama::COLLECTION_NAME);
+        }
+
+        DB::commit();
+
+        session()->flash("messages", [
+            [
+                "state" => MessageState::STATE_SUCCESS,
+                "content" => __("messages.update.success")
+            ]
+        ]);
+
+        return response('Success', 200);
     }
 
     /**

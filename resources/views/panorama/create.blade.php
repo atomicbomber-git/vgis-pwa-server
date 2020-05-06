@@ -7,16 +7,16 @@
         </li>
         <li class="breadcrumb-item">
             <a href="{{ route('panorama.index') }}">
-                Daftar Panorama
+                Panorama List
             </a>
         </li>
         <li class="breadcrumb-item active">
-            Tambahkan Panorama Baru
+            Create New Panorama
         </li>
     </ol>
 
     <div id="app">
-        <h1> Tambahkan Panorama Baru </h1>
+        <h1> Create New Panorama </h1>
 
         <panorama-create
             :map_config='{{ json_encode(config("map")) }}'
