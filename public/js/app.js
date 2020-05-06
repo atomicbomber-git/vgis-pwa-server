@@ -43050,13 +43050,7 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                            " +
-                        _vm._s(
-                          _vm.get(
-                            this.image_file,
-                            "name",
-                            "Pilih Berkas Gambar"
-                          )
-                        ) +
+                        _vm._s(_vm.get(this.image_file, "name", "Pick Image")) +
                         "\n                        "
                     )
                   ]

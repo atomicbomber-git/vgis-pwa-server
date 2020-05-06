@@ -139,7 +139,7 @@
                                 id="image">
                             <label class="custom-file-label"
                                    for="image">
-                                {{ get(this.image_file, "name", "Pilih Berkas Gambar") }}
+                                {{ get(this.image_file, "name", "Pick Image") }}
                             </label>
                         </div>
 
