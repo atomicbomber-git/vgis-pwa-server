@@ -2079,6 +2079,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2100,7 +2113,8 @@ __webpack_require__.r(__webpack_exports__);
       name: null,
       description: null,
       image_file: null,
-      image_file_url: null
+      image_file_url: null,
+      is_first: false
     };
   },
   watch: {
@@ -2130,7 +2144,8 @@ __webpack_require__.r(__webpack_exports__);
         description: this.description,
         latitude: this.pointer_marker.latitude,
         longitude: this.pointer_marker.longitude,
-        image: this.image_file
+        image: this.image_file,
+        is_first: this.is_first ? 1 : 0
       };
     },
     processed_form_data: function processed_form_data() {
@@ -2370,6 +2385,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2392,7 +2420,8 @@ __webpack_require__.r(__webpack_exports__);
       name: this.panorama.name,
       description: this.panorama.description,
       image_file: null,
-      image_file_url: null
+      image_file_url: null,
+      is_first: this.panorama.is_first
     };
   },
   watch: {
@@ -2418,6 +2447,7 @@ __webpack_require__.r(__webpack_exports__);
         latitude: this.pointer_marker.latitude,
         longitude: this.pointer_marker.longitude,
         image: this.image_file,
+        is_first: this.is_first ? 1 : 0,
         _method: 'put'
       };
     },
@@ -2504,14 +2534,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -42743,16 +42765,20 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row no-gutters" }, [
     _c("div", { staticClass: "col-md" }, [
-      _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card h-100" }, [
         _c(
           "div",
-          { staticClass: "card-body p-0" },
+          {
+            staticClass:
+              "card-body p-0 d-flex justify-content-center flex-column"
+          },
           [
             _c(
               "gmap-map",
               {
+                staticClass: "flex-fill",
                 style: {
-                  height: "600px"
+                  "min-height": "500px"
                 },
                 attrs: {
                   center: {
@@ -42799,87 +42825,32 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-md border p-3" }, [
-      _c("fieldset", [
-        _c("legend", [_vm._v(" Data ")]),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.onFormSubmit($event)
+    _c(
+      "div",
+      {
+        staticClass: "col-md border p-3",
+        staticStyle: { "min-height": "600px" }
+      },
+      [
+        _c("fieldset", [
+          _c("legend", [_vm._v(" Data")]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.onFormSubmit($event)
+                }
               }
-            }
-          },
-          [
-            _c("div", { staticClass: "form-group row" }, [
-              _c("div", { staticClass: "col" }, [
-                _c("label", { attrs: { for: "latitude" } }, [
-                  _vm._v(
-                    "\n                            Latitude:\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model.number",
-                      value: _vm.pointer_marker.latitude,
-                      expression: "pointer_marker.latitude",
-                      modifiers: { number: true }
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: {
-                    "is-invalid": _vm.get(
-                      _vm.error_data,
-                      "errors.latitude[0]",
-                      false
-                    )
-                  },
-                  attrs: {
-                    placeholder: "Latitude",
-                    id: "latitude",
-                    type: "number",
-                    step: "any"
-                  },
-                  domProps: { value: _vm.pointer_marker.latitude },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.pointer_marker,
-                        "latitude",
-                        _vm._n($event.target.value)
-                      )
-                    },
-                    blur: function($event) {
-                      return _vm.$forceUpdate()
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "invalid-feedback" }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(
-                        _vm.get(_vm.error_data, "errors.latitude[0]", "")
-                      ) +
-                      "\n                        "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "longitude" } }, [
+            },
+            [
+              _c("div", { staticClass: "form-group row" }, [
+                _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                  _c("label", { attrs: { for: "latitude" } }, [
                     _vm._v(
-                      "\n                                Longitude:\n                            "
+                      "\n                            Latitude:\n                        "
                     )
                   ]),
                   _vm._v(" "),
@@ -42888,8 +42859,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.number",
-                        value: _vm.pointer_marker.longitude,
-                        expression: "pointer_marker.longitude",
+                        value: _vm.pointer_marker.latitude,
+                        expression: "pointer_marker.latitude",
                         modifiers: { number: true }
                       }
                     ],
@@ -42897,16 +42868,17 @@ var render = function() {
                     class: {
                       "is-invalid": _vm.get(
                         _vm.error_data,
-                        "errors.longitude[0]",
+                        "errors.latitude[0]",
                         false
                       )
                     },
                     attrs: {
-                      placeholder: "Longitude",
-                      id: "longitude",
-                      type: "text"
+                      placeholder: "Latitude",
+                      id: "latitude",
+                      type: "number",
+                      step: "any"
                     },
-                    domProps: { value: _vm.pointer_marker.longitude },
+                    domProps: { value: _vm.pointer_marker.latitude },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
@@ -42914,7 +42886,7 @@ var render = function() {
                         }
                         _vm.$set(
                           _vm.pointer_marker,
-                          "longitude",
+                          "latitude",
                           _vm._n($event.target.value)
                         )
                       },
@@ -42926,150 +42898,274 @@ var render = function() {
                   _vm._v(" "),
                   _c("span", { staticClass: "invalid-feedback" }, [
                     _vm._v(
-                      "\n                                " +
-                        _vm._s(
-                          _vm.get(_vm.error_data, "errors.longitude[0]", "")
-                        ) +
-                        "\n                            "
-                    )
-                  ])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [
-                _vm._v("\n                        Name:\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model.number",
-                    value: _vm.name,
-                    expression: "name",
-                    modifiers: { number: true }
-                  }
-                ],
-                staticClass: "form-control",
-                class: {
-                  "is-invalid": _vm.get(_vm.error_data, "errors.name[0]", false)
-                },
-                attrs: { placeholder: "Name", id: "name", type: "text" },
-                domProps: { value: _vm.name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.name = _vm._n($event.target.value)
-                  },
-                  blur: function($event) {
-                    return _vm.$forceUpdate()
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "invalid-feedback" }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
-                    "\n                    "
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "description" } }, [
-                _vm._v(
-                  "\n                        Description:\n                    "
-                )
-              ]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model.number",
-                    value: _vm.description,
-                    expression: "description",
-                    modifiers: { number: true }
-                  }
-                ],
-                staticClass: "form-control",
-                class: {
-                  "is-invalid": _vm.get(
-                    _vm.error_data,
-                    "errors.description[0]",
-                    false
-                  )
-                },
-                attrs: {
-                  placeholder: "Description",
-                  id: "description",
-                  type: "text"
-                },
-                domProps: { value: _vm.description },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.description = _vm._n($event.target.value)
-                  },
-                  blur: function($event) {
-                    return _vm.$forceUpdate()
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "invalid-feedback" }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(
-                      _vm.get(_vm.error_data, "errors.description[0]", "")
-                    ) +
-                    "\n                    "
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "custom-file" }, [
-                _c("input", {
-                  ref: "image_input",
-                  staticClass: "custom-file-input",
-                  attrs: { type: "file", id: "image" },
-                  on: { change: _vm.onGambarInputChange }
-                }),
-                _vm._v(" "),
-                _c(
-                  "label",
-                  { staticClass: "custom-file-label", attrs: { for: "image" } },
-                  [
-                    _vm._v(
                       "\n                            " +
-                        _vm._s(_vm.get(this.image_file, "name", "Pick Image")) +
+                        _vm._s(
+                          _vm.get(_vm.error_data, "errors.latitude[0]", "")
+                        ) +
                         "\n                        "
                     )
-                  ]
-                )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6 col-sm-12 mt-3 mt-sm-0" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "longitude" } }, [
+                      _vm._v(
+                        "\n                                Longitude:\n                            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.number",
+                          value: _vm.pointer_marker.longitude,
+                          expression: "pointer_marker.longitude",
+                          modifiers: { number: true }
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: {
+                        "is-invalid": _vm.get(
+                          _vm.error_data,
+                          "errors.longitude[0]",
+                          false
+                        )
+                      },
+                      attrs: {
+                        placeholder: "Longitude",
+                        id: "longitude",
+                        type: "text"
+                      },
+                      domProps: { value: _vm.pointer_marker.longitude },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.pointer_marker,
+                            "longitude",
+                            _vm._n($event.target.value)
+                          )
+                        },
+                        blur: function($event) {
+                          return _vm.$forceUpdate()
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "invalid-feedback" }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(
+                            _vm.get(_vm.error_data, "errors.longitude[0]", "")
+                          ) +
+                          "\n                            "
+                      )
+                    ])
+                  ])
+                ])
               ]),
               _vm._v(" "),
-              _vm.image_file_url
-                ? _c("img", {
-                    staticClass: "img-fluid rounded-top mt-3",
-                    attrs: { src: _vm.image_file_url, alt: "" }
-                  })
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _vm._m(0)
-          ]
-        )
-      ])
-    ])
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "custom-control custom-checkbox" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.is_first,
+                        expression: "is_first"
+                      }
+                    ],
+                    staticClass: "custom-control-input",
+                    attrs: { type: "checkbox", id: "is_first" },
+                    domProps: {
+                      checked: Array.isArray(_vm.is_first)
+                        ? _vm._i(_vm.is_first, null) > -1
+                        : _vm.is_first
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.is_first,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.is_first = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.is_first = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.is_first = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-control-label",
+                      attrs: { for: "is_first" }
+                    },
+                    [_vm._v(" First Panorama\n                        ")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "name" } }, [
+                  _vm._v(
+                    "\n                        Name:\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: _vm.name,
+                      expression: "name",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      _vm.error_data,
+                      "errors.name[0]",
+                      false
+                    )
+                  },
+                  attrs: { placeholder: "Name", id: "name", type: "text" },
+                  domProps: { value: _vm.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = _vm._n($event.target.value)
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "description" } }, [
+                  _vm._v(
+                    "\n                        Description:\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: _vm.description,
+                      expression: "description",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      _vm.error_data,
+                      "errors.description[0]",
+                      false
+                    )
+                  },
+                  attrs: {
+                    placeholder: "Description",
+                    id: "description",
+                    type: "text"
+                  },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = _vm._n($event.target.value)
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(
+                        _vm.get(_vm.error_data, "errors.description[0]", "")
+                      ) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "custom-file" }, [
+                  _c("input", {
+                    ref: "image_input",
+                    staticClass: "custom-file-input",
+                    attrs: { type: "file", id: "image" },
+                    on: { change: _vm.onGambarInputChange }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-file-label",
+                      attrs: { for: "image" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(
+                            _vm.get(this.image_file, "name", "Pick Image")
+                          ) +
+                          "\n                        "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.image_file_url
+                  ? _c("img", {
+                      staticClass: "img-fluid rounded-top mt-3",
+                      attrs: { src: _vm.image_file_url, alt: "" }
+                    })
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
+            ]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -43108,16 +43204,17 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row no-gutters" }, [
     _c("div", { staticClass: "col-md" }, [
-      _c("div", { staticClass: "card" }, [
+      _c("div", { staticClass: "card h-100" }, [
         _c(
           "div",
-          { staticClass: "card-body p-0" },
+          { staticClass: "card-body p-0 d-flex flex-column" },
           [
             _c(
               "gmap-map",
               {
+                staticClass: "flex-fill",
                 style: {
-                  height: "600px"
+                  "min-height": "500px"
                 },
                 attrs: {
                   center: {
@@ -43164,87 +43261,32 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "col-md border p-3" }, [
-      _c("fieldset", [
-        _c("legend", [_vm._v(" Data ")]),
-        _vm._v(" "),
-        _c(
-          "form",
-          {
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.onFormSubmit($event)
+    _c(
+      "div",
+      {
+        staticClass: "col-md border p-3",
+        staticStyle: { "min-height": "600px" }
+      },
+      [
+        _c("fieldset", [
+          _c("legend", [_vm._v(" Data ")]),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.onFormSubmit($event)
+                }
               }
-            }
-          },
-          [
-            _c("div", { staticClass: "form-group row" }, [
-              _c("div", { staticClass: "col" }, [
-                _c("label", { attrs: { for: "latitude" } }, [
-                  _vm._v(
-                    "\n                            Latitude:\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model.number",
-                      value: _vm.pointer_marker.latitude,
-                      expression: "pointer_marker.latitude",
-                      modifiers: { number: true }
-                    }
-                  ],
-                  staticClass: "form-control",
-                  class: {
-                    "is-invalid": _vm.get(
-                      _vm.error_data,
-                      "errors.latitude[0]",
-                      false
-                    )
-                  },
-                  attrs: {
-                    placeholder: "Latitude",
-                    id: "latitude",
-                    type: "number",
-                    step: "any"
-                  },
-                  domProps: { value: _vm.pointer_marker.latitude },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.$set(
-                        _vm.pointer_marker,
-                        "latitude",
-                        _vm._n($event.target.value)
-                      )
-                    },
-                    blur: function($event) {
-                      return _vm.$forceUpdate()
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _c("span", { staticClass: "invalid-feedback" }, [
-                  _vm._v(
-                    "\n                            " +
-                      _vm._s(
-                        _vm.get(_vm.error_data, "errors.latitude[0]", "")
-                      ) +
-                      "\n                        "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col" }, [
-                _c("div", { staticClass: "form-group" }, [
-                  _c("label", { attrs: { for: "longitude" } }, [
+            },
+            [
+              _c("div", { staticClass: "form-group row" }, [
+                _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+                  _c("label", { attrs: { for: "latitude" } }, [
                     _vm._v(
-                      "\n                                Longitude:\n                            "
+                      "\n                            Latitude:\n                        "
                     )
                   ]),
                   _vm._v(" "),
@@ -43253,8 +43295,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model.number",
-                        value: _vm.pointer_marker.longitude,
-                        expression: "pointer_marker.longitude",
+                        value: _vm.pointer_marker.latitude,
+                        expression: "pointer_marker.latitude",
                         modifiers: { number: true }
                       }
                     ],
@@ -43262,16 +43304,17 @@ var render = function() {
                     class: {
                       "is-invalid": _vm.get(
                         _vm.error_data,
-                        "errors.longitude[0]",
+                        "errors.latitude[0]",
                         false
                       )
                     },
                     attrs: {
-                      placeholder: "Longitude",
-                      id: "longitude",
-                      type: "text"
+                      placeholder: "Latitude",
+                      id: "latitude",
+                      type: "number",
+                      step: "any"
                     },
-                    domProps: { value: _vm.pointer_marker.longitude },
+                    domProps: { value: _vm.pointer_marker.latitude },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
@@ -43279,7 +43322,7 @@ var render = function() {
                         }
                         _vm.$set(
                           _vm.pointer_marker,
-                          "longitude",
+                          "latitude",
                           _vm._n($event.target.value)
                         )
                       },
@@ -43291,164 +43334,288 @@ var render = function() {
                   _vm._v(" "),
                   _c("span", { staticClass: "invalid-feedback" }, [
                     _vm._v(
-                      "\n                                " +
-                        _vm._s(
-                          _vm.get(_vm.error_data, "errors.longitude[0]", "")
-                        ) +
-                        "\n                            "
-                    )
-                  ])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "name" } }, [
-                _vm._v("\n                        Name:\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model.number",
-                    value: _vm.name,
-                    expression: "name",
-                    modifiers: { number: true }
-                  }
-                ],
-                staticClass: "form-control",
-                class: {
-                  "is-invalid": _vm.get(_vm.error_data, "errors.name[0]", false)
-                },
-                attrs: { placeholder: "Name", id: "name", type: "text" },
-                domProps: { value: _vm.name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.name = _vm._n($event.target.value)
-                  },
-                  blur: function($event) {
-                    return _vm.$forceUpdate()
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "invalid-feedback" }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
-                    "\n                    "
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "description" } }, [
-                _vm._v(
-                  "\n                        Description:\n                    "
-                )
-              ]),
-              _vm._v(" "),
-              _c("textarea", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model.number",
-                    value: _vm.description,
-                    expression: "description",
-                    modifiers: { number: true }
-                  }
-                ],
-                staticClass: "form-control",
-                class: {
-                  "is-invalid": _vm.get(
-                    _vm.error_data,
-                    "errors.description[0]",
-                    false
-                  )
-                },
-                attrs: {
-                  placeholder: "Description",
-                  id: "description",
-                  type: "text"
-                },
-                domProps: { value: _vm.description },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.description = _vm._n($event.target.value)
-                  },
-                  blur: function($event) {
-                    return _vm.$forceUpdate()
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "invalid-feedback" }, [
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(
-                      _vm.get(_vm.error_data, "errors.description[0]", "")
-                    ) +
-                    "\n                    "
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "mb-2" }, [_vm._v(" Current Image: ")]),
-              _vm._v(" "),
-              _c("img", {
-                staticClass: "img-fluid rounded-top",
-                attrs: {
-                  src: "/panorama-original-image/" + _vm.panorama.id,
-                  alt: ""
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("div", { staticClass: "mb-2" }, [_vm._v(" New Image: ")]),
-              _vm._v(" "),
-              _c("div", { staticClass: "custom-file" }, [
-                _c("input", {
-                  ref: "image_input",
-                  staticClass: "custom-file-input",
-                  attrs: { type: "file", id: "image" },
-                  on: { change: _vm.onGambarInputChange }
-                }),
-                _vm._v(" "),
-                _c(
-                  "label",
-                  { staticClass: "custom-file-label", attrs: { for: "image" } },
-                  [
-                    _vm._v(
                       "\n                            " +
-                        _vm._s(_vm.get(this.image_file, "name", "Pick Image")) +
+                        _vm._s(
+                          _vm.get(_vm.error_data, "errors.latitude[0]", "")
+                        ) +
                         "\n                        "
                     )
-                  ]
-                )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-md-6 col-sm-12 mt-2 mt-sm-0" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "longitude" } }, [
+                      _vm._v(
+                        "\n                                Longitude:\n                            "
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model.number",
+                          value: _vm.pointer_marker.longitude,
+                          expression: "pointer_marker.longitude",
+                          modifiers: { number: true }
+                        }
+                      ],
+                      staticClass: "form-control",
+                      class: {
+                        "is-invalid": _vm.get(
+                          _vm.error_data,
+                          "errors.longitude[0]",
+                          false
+                        )
+                      },
+                      attrs: {
+                        placeholder: "Longitude",
+                        id: "longitude",
+                        type: "text"
+                      },
+                      domProps: { value: _vm.pointer_marker.longitude },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(
+                            _vm.pointer_marker,
+                            "longitude",
+                            _vm._n($event.target.value)
+                          )
+                        },
+                        blur: function($event) {
+                          return _vm.$forceUpdate()
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "invalid-feedback" }, [
+                      _vm._v(
+                        "\n                                " +
+                          _vm._s(
+                            _vm.get(_vm.error_data, "errors.longitude[0]", "")
+                          ) +
+                          "\n                            "
+                      )
+                    ])
+                  ])
+                ])
               ]),
               _vm._v(" "),
-              _vm.image_file_url
-                ? _c("img", {
-                    staticClass: "img-fluid rounded-top mt-3",
-                    attrs: { src: _vm.image_file_url, alt: "" }
-                  })
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _vm._m(0)
-          ]
-        )
-      ])
-    ])
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "custom-control custom-checkbox" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.is_first,
+                        expression: "is_first"
+                      }
+                    ],
+                    staticClass: "custom-control-input",
+                    attrs: { type: "checkbox", id: "is_first" },
+                    domProps: {
+                      checked: Array.isArray(_vm.is_first)
+                        ? _vm._i(_vm.is_first, null) > -1
+                        : _vm.is_first
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.is_first,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 && (_vm.is_first = $$a.concat([$$v]))
+                          } else {
+                            $$i > -1 &&
+                              (_vm.is_first = $$a
+                                .slice(0, $$i)
+                                .concat($$a.slice($$i + 1)))
+                          }
+                        } else {
+                          _vm.is_first = $$c
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-control-label",
+                      attrs: { for: "is_first" }
+                    },
+                    [_vm._v(" First Panorama\n                        ")]
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "name" } }, [
+                  _vm._v(
+                    "\n                        Name:\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: _vm.name,
+                      expression: "name",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      _vm.error_data,
+                      "errors.name[0]",
+                      false
+                    )
+                  },
+                  attrs: { placeholder: "Name", id: "name", type: "text" },
+                  domProps: { value: _vm.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = _vm._n($event.target.value)
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(_vm.get(_vm.error_data, "errors.name[0]", "")) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "description" } }, [
+                  _vm._v(
+                    "\n                        Description:\n                    "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model.number",
+                      value: _vm.description,
+                      expression: "description",
+                      modifiers: { number: true }
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      _vm.error_data,
+                      "errors.description[0]",
+                      false
+                    )
+                  },
+                  attrs: {
+                    placeholder: "Description",
+                    id: "description",
+                    type: "text"
+                  },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = _vm._n($event.target.value)
+                    },
+                    blur: function($event) {
+                      return _vm.$forceUpdate()
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("span", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(
+                        _vm.get(_vm.error_data, "errors.description[0]", "")
+                      ) +
+                      "\n                    "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "mb-2" }, [_vm._v(" Current Image:")]),
+                _vm._v(" "),
+                _c("img", {
+                  staticClass: "img-fluid rounded-top",
+                  attrs: {
+                    src: "/panorama-original-image/" + _vm.panorama.id,
+                    alt: ""
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("div", { staticClass: "mb-2" }, [_vm._v(" New Image:")]),
+                _vm._v(" "),
+                _c("div", { staticClass: "custom-file" }, [
+                  _c("input", {
+                    ref: "image_input",
+                    staticClass: "custom-file-input",
+                    attrs: { type: "file", id: "image" },
+                    on: { change: _vm.onGambarInputChange }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticClass: "custom-file-label",
+                      attrs: { for: "image" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(
+                            _vm.get(this.image_file, "name", "Pick Image")
+                          ) +
+                          "\n                        "
+                      )
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.image_file_url
+                  ? _c("img", {
+                      staticClass: "img-fluid rounded-top mt-3",
+                      attrs: { src: _vm.image_file_url, alt: "" }
+                    })
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _vm._m(0)
+            ]
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
@@ -43514,29 +43681,6 @@ var render = function() {
                     }
                   },
                   [
-                    _vm.selected_panorama_link_position
-                      ? _c(
-                          "gmap-info-window",
-                          {
-                            attrs: {
-                              position: {
-                                lat:
-                                  _vm.selected_panorama_link_position.latitude,
-                                lng:
-                                  _vm.selected_panorama_link_position.longitude
-                              }
-                            }
-                          },
-                          [
-                            _c("h2", [
-                              _vm._v(
-                                "\n                                TEST TEST\n                            "
-                              )
-                            ])
-                          ]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
                     _vm.in_connecting_mode && _vm.current_mouse_position
                       ? _c("gmap-polyline", {
                           attrs: {
@@ -43623,6 +43767,18 @@ var render = function() {
                           "\n                        "
                       )
                     ]),
+                    _vm._v(" "),
+                    _vm.selected_panorama.is_first
+                      ? _c(
+                          "span",
+                          { staticClass: "badge badge-pill badge-primary" },
+                          [
+                            _vm._v(
+                              "\n                            First Panorama\n                        "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("p", [
                       _vm._v(

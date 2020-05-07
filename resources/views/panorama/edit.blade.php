@@ -7,7 +7,7 @@
         </li>
         <li class="breadcrumb-item">
             <a href="{{ route('panorama.index') }}">
-                Create
+                Panorama List
             </a>
         </li>
         <li class="breadcrumb-item active">

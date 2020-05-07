@@ -15,7 +15,7 @@ class PanoramaSeeder extends Seeder
     {
         DB::beginTransaction();
 
-        factory(Panorama::class, 6)
+        $panoramas = factory(Panorama::class, 6)
             ->create()
             ->each(function (Panorama $panorama) {
                 $panorama
@@ -23,6 +23,10 @@ class PanoramaSeeder extends Seeder
                     ->preservingOriginal()
                     ->toMediaCollection(Panorama::COLLECTION_NAME);
             });
+
+        $panoramas->first()->update([
+            "is_first" => true,
+        ]);
 
         DB::commit();
     }

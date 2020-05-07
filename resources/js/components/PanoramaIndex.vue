@@ -12,21 +12,6 @@
                             :style="{ height: '100%' }"
                             map-type-id="terrain"
                         >
-
-                            <gmap-info-window
-                                v-if="selected_panorama_link_position"
-                                :position="{
-                                lat: selected_panorama_link_position.latitude,
-                                lng: selected_panorama_link_position.longitude
-                            }"
-                            >
-                                <h2>
-                                    TEST TEST
-                                </h2>
-
-                            </gmap-info-window>
-
-
                             <gmap-polyline
                                 v-if="in_connecting_mode && current_mouse_position"
                                 :options="{
@@ -72,6 +57,13 @@
                                 <i class="fas fa-map-marker"></i>
                                 {{ selected_panorama.name }}
                             </h2>
+
+                            <span
+                                v-if="selected_panorama.is_first"
+                                class="badge badge-pill badge-primary">
+                                First Panorama
+                            </span>
+
                             <p>
                                 {{ selected_panorama.description }}
                             </p>

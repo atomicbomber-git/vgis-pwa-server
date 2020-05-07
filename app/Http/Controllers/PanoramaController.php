@@ -63,12 +63,23 @@ class PanoramaController extends Controller
            "latitude" => ["required", "numeric"],
            "longitude" => ["required", "numeric"],
            "image" => ["required", "image"],
+           "is_first" => ["required", "boolean"],
         ]));
+
+        DB::beginTransaction();
+
+        if ($data["is_first"]) {
+            Panorama::query()->update([
+                "is_first" => false,
+            ]);
+        }
 
         /** @var Panorama $panorama */
         $panorama = Panorama::query()->create($data->except(["image"])->toArray());
         $panorama->addMediaFromRequest("image")
             ->toMediaCollection(Panorama::COLLECTION_NAME);
+
+        DB::commit();
 
         session()->flash("messages", [
             [
@@ -123,9 +134,16 @@ class PanoramaController extends Controller
             "latitude" => ["required", "numeric"],
             "longitude" => ["required", "numeric"],
             "image" => ["nullable", "image"],
+            "is_first" => ["required", "boolean"],
         ]));
 
         DB::beginTransaction();
+
+        if ($data["is_first"]) {
+            Panorama::query()->update([
+                "is_first" => false,
+            ]);
+        }
 
         $panorama->update($data->except(["image"])->toArray());
 
