@@ -243,7 +243,7 @@
 
                 Object.keys(this.form_data)
                     .forEach(key => {
-                        if (this.form_data[key]) {
+                        if ((this.form_data[key] !== null) || (this.form_data[key] !== "undefined")) {
                             formData.append(key, this.form_data[key])
                         }
                     })

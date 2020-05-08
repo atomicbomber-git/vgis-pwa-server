@@ -2153,7 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var formData = new FormData();
       Object.keys(this.form_data).forEach(function (key) {
-        if (_this2.form_data[key]) {
+        if (_this2.form_data[key] !== null || _this2.form_data[key] !== "undefined") {
           formData.append(key, _this2.form_data[key]);
         }
       });
@@ -2456,7 +2456,7 @@ __webpack_require__.r(__webpack_exports__);
 
       var formData = new FormData();
       Object.keys(this.form_data).forEach(function (key) {
-        if (_this2.form_data[key]) {
+        if (_this2.form_data[key] !== null || _this2.form_data[key] !== "undefined") {
           formData.append(key, _this2.form_data[key]);
         }
       });
