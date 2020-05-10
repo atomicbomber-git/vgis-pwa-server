@@ -59259,8 +59259,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /* harmony default export */ __webpack_exports__["default"] = ({
   confirmationModal: function confirmationModal(args) {
     return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire(_objectSpread({
-      titleText: "Konfirmasi",
-      text: "Apakah Anda yakin Anda ingin melakukan tindakan ini?",
+      titleText: "Confirmation",
+      text: "Are you sure you want to perform this action?",
       icon: "question",
       showCancelButton: true
     }, args));
@@ -59268,13 +59268,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   errorModal: function errorModal(args) {
     return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
       titleText: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(args, "titleText", "Error"),
-      text: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(args, "text", "Terjadi kesalahan pada sistem."),
+      text: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(args, "text", "There was a system error."),
       icon: Object(lodash__WEBPACK_IMPORTED_MODULE_1__["get"])(args, "icon", "error")
     });
   },
   successModal: function successModal() {
     var titleText = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Success";
-    var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Tindakan berhasil.";
+    var text = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "Action successful.";
     var icon = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "success";
     return sweetalert2__WEBPACK_IMPORTED_MODULE_0___default.a.fire({
       titleText: titleText,

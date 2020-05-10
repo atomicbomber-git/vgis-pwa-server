@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ApiMapConfigController;
+use App\Http\Controllers\ApiPanoramaController;
+use App\Http\Controllers\PanoramaImageController;
+use App\Http\Controllers\PanoramaOriginalImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::apiResource('panorama', class_basename(ApiPanoramaController::class));
+Route::get('/map-config', class_basename(ApiMapConfigController::class));
+Route::get('/panorama-original-image/{panorama}', class_basename(PanoramaOriginalImageController::class));
+Route::get('/panorama-image/{panorama}/{zoom}/{tile_x}/{tile_y}', class_basename(PanoramaImageController::class));
